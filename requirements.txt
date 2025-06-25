@@ -4,3 +4,9 @@ sqlparse==0.5.3
 inertia-django
 django-vite
 whitenoise
+pillow
+psycopg2-binary
+django-debug-toolbar~=5.2.0
+djangorestframework~=3.16.0
+django-extensions
+django-js-reverse

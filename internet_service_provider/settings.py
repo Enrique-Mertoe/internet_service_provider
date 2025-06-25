@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inertia',
     'isp.apps.IspConfig',
-    'django_vite'
+    'django_vite',
+    'routes',
+    'django_extensions',
+    'django_js_reverse'
+
 ]
 
 MIDDLEWARE = [
@@ -49,7 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'inertia.middleware.InertiaMiddleware'
+    'inertia.middleware.InertiaMiddleware',
+    'routes.middleware.RouteGeneratorMiddleware'
 ]
 
 ROOT_URLCONF = 'internet_service_provider.urls'
@@ -76,9 +81,17 @@ WSGI_APPLICATION = 'internet_service_provider.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'sqlite': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'isp',
+        'USER': 'laraveluser',
+        'PASSWORD': 'secret',
+        'HOST': 'localhost',  # or your DB server IP
+        'PORT': '5432',
     }
 }
 
@@ -117,10 +130,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [
-    BASE_DIR / 'isp/static/dist',
-    BASE_DIR / 'isp/resources',
-]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -141,10 +150,15 @@ DJANGO_VITE = {
         'manifest_path': DJANGO_VITE_ASSETS_PATH / '.vite' / 'manifest.json',
     }
 }
-STATICFILES_DIRS = [DJANGO_VITE_ASSETS_PATH]
 
 # Inertia settings
 INERTIA_LAYOUT = BASE_DIR / "isp" / "templates/app.main.html"
+
+STATICFILES_DIRS = [
+    DJANGO_VITE_ASSETS_PATH,
+    BASE_DIR / 'isp/static/dist',
+    BASE_DIR / 'isp/resources/src/public',
+]
 
 
 def immutable_file_test(path, url):
@@ -154,3 +168,39 @@ def immutable_file_test(path, url):
 
 
 WHITENOISE_IMMUTABLE_FILE_TEST = immutable_file_test
+
+ROUTE_GENERATOR = {
+    'OUTPUT_PATH': BASE_DIR / 'isp/resources/src/utils/routes.ts',
+    'FORMAT': 'ts',  # or 'js'
+    'ADMIN_ROUTES': False,
+    'AUTO_GENERATE': True,  # Enable auto-generation in development
+}
+
+# Exclude admin routes (like your custom setting)
+JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
+
+# Optional: Include only specific namespaces
+# JS_REVERSE_INCLUDE_ONLY_NAMESPACES = ['api', 'customer']
+
+# For static file generation (similar to your approach)
+JS_REVERSE_OUTPUT_PATH = BASE_DIR / 'isp/resources/src/utils'
+
+AUTH_USER_MODEL = 'isp.User'
+
+# Security
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+
+# API Configuration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20
+}

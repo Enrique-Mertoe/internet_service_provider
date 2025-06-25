@@ -5,18 +5,24 @@ import react from "@vitejs/plugin-react";
 import django from "django-vite-plugin"
 
 export default defineConfig({
-    root: resolve("./isp/resources/src"),
+    root: resolve(__dirname, "isp/resources/src"),
     base: "/static/",
+    publicDir: resolve(__dirname, "isp/resources/public"),
+    resolve: {
+        alias: {
+            "@": resolve(__dirname, "isp/resources/src"),
+        },
+    },
     plugins: [
         // django({
         //     input: ['isp/static/src/css/app.css', 'isp/static/src/main.tsx'],
         //     pyPath:".venv/bin/python"
         // }),
-        react({ include: '**/*.disabled',}),
+        react({include: '**/*.disabled',}),
         tailwindcss()],
     build: {
         outDir: resolve("./isp/static/dist"),
-        assetsDir: "",
+        assetsDir: "assets",
         manifest: true,
         emptyOutDir: true,
         rollupOptions: {
@@ -32,11 +38,14 @@ export default defineConfig({
                     return `f2c-${rand}.js`;
                 },
                 // Randomize asset file names (CSS, images, etc.)
-                assetFileNames: () => {
+                assetFileNames: (assetInfo) => {
                     const rand = Math.random().toString(36).substring(2, 12);
-                    return `f2c-${rand}.[ext]`;
+                    const info = assetInfo.name ? assetInfo.name.split('.') : ['asset'];
+                    const ext = info[info.length - 1];
+                    return `assets/f2c-${rand}.${ext}`;
                 },
             }
         },
     },
+    assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.gif'],
 });

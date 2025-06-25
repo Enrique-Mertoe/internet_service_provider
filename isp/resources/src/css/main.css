@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "@fontsource/roboto/700.css";
+
+@plugin 'tailwind-scrollbar';
+@theme inline {
+    --shadow-smv: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    --rounded-inherit: inherit;
+}
