@@ -30,9 +30,9 @@ export default function MainDrawer({window}) {
     return (
         <Box component="nav" sx={{flexShrink: {md: 0}, zIndex: 1200}} aria-label="mailbox folders">
             {!downLG ? (
-                <MiniDrawerStyled className={"flex flex-col"} variant="permanent" open={drawerOpen}>
+                <MiniDrawerStyled className={"flex group flex-col"} variant="permanent" open={drawerOpen}>
                     {drawerHeader}
-                    <div className="flex-grow scrollbar-thin overflow-y-auto">
+                    <div className="flex-grow group-hover:overflow-y-auto scrollbar-thin overflow-hidden">
                         {drawerContent}
                     </div>
                 </MiniDrawerStyled>

@@ -35,8 +35,6 @@ class Company(TimeStampedModel):
     phone = models.CharField(max_length=20)
     address = models.TextField()
     website = models.URLField(blank=True)
-    license_number = models.CharField(max_length=100, unique=True)
-    tax_id = models.CharField(max_length=50, blank=True)
     is_active = models.BooleanField(default=True)
 
     # Business settings

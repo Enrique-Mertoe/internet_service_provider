@@ -76,9 +76,9 @@ class CompanyFilterMixin:
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'phone', 'license_number', 'is_active', 'created_at']
-    list_filter = ['is_active', 'currency', 'billing_cycle', 'created_at']
-    search_fields = ['name', 'email', 'phone', 'license_number']
+    list_display = ['name', 'email', 'phone', 'is_active', 'created_at']
+    list_filter = ['is_active', 'currency', 'created_at']
+    search_fields = ['name', 'email', 'phone',]
     prepopulated_fields = {'slug': ('name',)}
     fieldsets = (
         ('Basic Information', {
@@ -88,10 +88,10 @@ class CompanyAdmin(admin.ModelAdmin):
             'fields': ('address',)
         }),
         ('Business Details', {
-            'fields': ('license_number', 'tax_id', 'is_active')
+            'fields': ('is_active',)
         }),
         ('Settings', {
-            'fields': ('currency', 'timezone', 'billing_cycle'),
+            'fields': ('currency', 'timezone'),
             'classes': ('collapse',)
         }),
     )

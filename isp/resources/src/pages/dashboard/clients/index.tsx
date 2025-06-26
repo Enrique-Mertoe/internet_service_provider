@@ -1,27 +1,34 @@
+//@ts-ignore
 import DashboardLayout from "@/layouts/Dashboard"
+//@ts-ignore
 import ThemeCustomization from "@/themes"
-import MainCard from "@/components/MainCard"
 import {
-    Modal,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-    TextField,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Grid,
-    Typography,
     Box,
-    CircularProgress
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    Grid,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
 } from '@mui/material'
 
 
-import {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {api} from "@/utils/api";
+import AsyncSelect from "@/components/@extended/AsyncSelect";
+import {Add} from "@mui/icons-material";
+import Tooltip from '@mui/material/Tooltip';
+import CreatePackage from "@/components/ui/CreatePackage";
+import {Modal} from "@/utils/shortcuts";
+import CreateClient from "@/components/ui/CreateClient";
 // import {useNavigate} from "react-router-dom";
 // import {useApp} from "../ui/AppContext.tsx";
 
@@ -114,17 +121,7 @@ function ClientsPage() {
     const [isDeletingClient, setIsDeletingClient] = useState<number | null>(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [clientToDelete, setClientToDelete] = useState<{ id: number, phone: string } | null>(null);
-    const [isLoadingAdd, setIsLoadingAdd] = useState(false);
 
-    const [newClient, setNewClient] = useState<NewClient>({
-        fullName: "",
-        email: "",
-        phone: "",
-        address: "",
-        package: "",
-        packageId: null,
-        status: "active",
-    });
 
     const [filters, setFilters] = useState({
         status: "all",
@@ -153,6 +150,7 @@ function ClientsPage() {
         setShowDeleteConfirm(true);
     };
 
+
     // 6. Add this function to confirm deletion
     const confirmDeleteClient = async () => {
         if (!clientToDelete) return;
@@ -179,84 +177,6 @@ function ClientsPage() {
         }
     };
 
-    const handleAddClient = async () => {
-        if (!newClient.fullName || !newClient.phone || !newClient.package) {
-            alert("Full Name, Phone Number, and Package are mandatory fields.");
-            return;
-        }
-
-        setIsLoadingSubmit(true);
-        setIsLoadingAdd(true);
-
-        const clientData = {
-            fullName: newClient.fullName,
-            phone: newClient.phone,
-            address: newClient.address,
-            email: newClient.email,
-            package: newClient.package,
-            packageId: newClient.packageId,
-            status: "action",
-        };
-
-        try {
-            const response = await api.post({route: '/api/clients/create/', data: clientData});
-            console.log("Client added successfully:", response.data);
-
-            if (response.data.client) {
-                const user = response.data.client
-                const formattedClient = {
-                    id: user.id,
-                    fullName: user.full_name,
-                    email: user.email || "",
-                    phone: user.phone,
-                    address: user.address || "",
-                    package: user.package,
-                    status: determineStatus(user),
-                    dateJoined: user.created_at,
-                    lastPayment: user.package_start || user.created_at,
-                    avatar: "/api/placeholder/40/40",
-                    dueAmount: calculateDueAmount(user),
-                    router_username: user.router_username,
-                    router_password: user.router_password,
-                    created_at: user.created_at,
-                    due: user.due,
-                    package_start: user.package_start
-                };
-                // setClients(formattedClient);
-                setClients((prev) => [formattedClient, ...prev]);
-            }
-
-            setShowAddModal(false);
-            setNewClient({
-                fullName: "",
-                email: "",
-                phone: "",
-                address: "",
-                package: "",
-                status: "active",
-                packageId: null,
-            });
-        } catch (error) {
-            console.error("Failed to add client:", error);
-            alert("Failed to add client. Please try again.");
-        } finally {
-            setIsLoadingSubmit(false);
-            setIsLoadingAdd(false);
-
-        }
-    };
-
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const res = await api.post<{ pkgs: Package[] }>('/api/pkgs/', {load_type: "all"});
-                setClientsPackages(res.data.pkgs);
-            } catch (error) {
-                console.error("Failed to fetch packages:", error);
-            }
-        })();
-    }, []);
 
     useEffect(() => {
         const fetchClients = async () => {
@@ -264,13 +184,13 @@ function ClientsPage() {
             try {
                 const res = await api.get({
                     route: "API_CUSTOMER_LIST",
-                    routeParams: { format: "json" },
-                    params: filters.status === "all" ? {
-                        load_type: "all"
-                    } : {
-                        load_type: "active",
-                        status: filters.status
-                    }
+                    params: {format: "json"},
+                    // params: filters.status === "all" ? {
+                    //     load_type: "all"
+                    // } : {
+                    //     load_type: "active",
+                    //     status: filters.status
+                    // }
                 });
                 const formattedClients = res.data.users.map((user: any) => ({
                     id: user.id,
@@ -559,24 +479,24 @@ function ClientsPage() {
     // Delete Confirmation Modal - MUI Version
     const renderDeleteConfirmModal = () => (
         <Dialog
-            open={showDeleteConfirm && !!clientToDelete}
+            // open={showDeleteConfirm && !!clientToDelete}
             onClose={() => setShowDeleteConfirm(false)}
             maxWidth="sm"
             fullWidth
         >
-            <DialogTitle sx={{ color: 'error.main', fontWeight: 600 }}>
+            <DialogTitle sx={{color: 'error.main', fontWeight: 600}}>
                 Delete Client
             </DialogTitle>
             <DialogContent>
-                <Typography variant="body1" sx={{ mt: 1 }}>
+                <Typography variant="body1" sx={{mt: 1}}>
                     Are you sure you want to delete{' '}
-                    <Typography component="span" sx={{ fontWeight: 600 }}>
+                    <Typography component="span" sx={{fontWeight: 600}}>
                         {clientToDelete?.phone}
                     </Typography>
                     ? This action cannot be undone.
                 </Typography>
             </DialogContent>
-            <DialogActions sx={{ px: 3, pb: 3 }}>
+            <DialogActions sx={{px: 3, pb: 3}}>
                 <Button
                     onClick={() => setShowDeleteConfirm(false)}
                     variant="outlined"
@@ -589,11 +509,11 @@ function ClientsPage() {
                     variant="contained"
                     color="error"
                     disabled={isDeletingClient === clientToDelete?.id}
-                    sx={{ minWidth: 120 }}
+                    sx={{minWidth: 120}}
                 >
                     {isDeletingClient === clientToDelete?.id ? (
                         <>
-                            <CircularProgress size={20} sx={{ mr: 1, color: 'white' }} />
+                            <CircularProgress size={20} sx={{mr: 1, color: 'white'}}/>
                             Deleting...
                         </>
                     ) : (
@@ -620,8 +540,8 @@ function ClientsPage() {
                         <div className="mt-4 md:mt-0">
                             <Button
                                 variant="contained"
-                                onClick={() => setShowAddModal(true)}
-                                sx={{ 
+                                onClick={() => Modal.addClient()}
+                                sx={{
                                     bgcolor: 'success.main',
                                     '&:hover': {
                                         bgcolor: 'success.dark'
@@ -944,129 +864,6 @@ function ClientsPage() {
                         </div>
                     </div>
                 </div>
-
-                {/* Add Client Modal - MUI Version */}
-                <Dialog
-                    open={showAddModal}
-                    onClose={() => setShowAddModal(false)}
-                    maxWidth="md"
-                    fullWidth
-                >
-                    <DialogTitle sx={{ color: 'primary.main', fontWeight: 600 }}>
-                        Add New Client
-                    </DialogTitle>
-                    <DialogContent>
-                        <Box component="form" sx={{ mt: 2 }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Full Name"
-                                        value={newClient.fullName}
-                                        onChange={(e) => setNewClient({...newClient, fullName: e.target.value})}
-                                        required
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Email"
-                                        type="email"
-                                        value={newClient.email}
-                                        onChange={(e) => setNewClient({...newClient, email: e.target.value})}
-                                        required
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Phone"
-                                        type="tel"
-                                        value={newClient.phone}
-                                        onChange={(e) => setNewClient({...newClient, phone: e.target.value})}
-                                        required
-                                        variant="outlined"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Address"
-                                        value={newClient.address}
-                                        onChange={(e) => setNewClient({...newClient, address: e.target.value})}
-                                        required
-                                        variant="outlined"
-                                        multiline
-                                        rows={2}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <FormControl fullWidth required>
-                                        <InputLabel>Package</InputLabel>
-                                        <Select
-                                            value={newClient.package}
-                                            label="Package"
-                                            onChange={(e) => {
-                                                const selectedPackage = clientsPackages.find(
-                                                    (pkg) => `${pkg.name} ${pkg.speed} ${pkg.duration}` === e.target.value
-                                                );
-                                                setNewClient({
-                                                    ...newClient,
-                                                    package: e.target.value,
-                                                    packageId: selectedPackage?.id || null,
-                                                });
-                                            }}
-                                        >
-                                            {clientsPackages.length === 0 ? (
-                                                <MenuItem value="" disabled>
-                                                    Loading packages...
-                                                </MenuItem>
-                                            ) : (
-                                                clientsPackages.map((pkg, index) => (
-                                                    <MenuItem key={index} value={`${pkg.name} ${pkg.speed} ${pkg.duration}`}>
-                                                        {pkg.name} {pkg.speed} {pkg.duration}
-                                                    </MenuItem>
-                                                ))
-                                            )}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </DialogContent>
-                    <DialogActions sx={{ px: 3, pb: 3 }}>
-                        <Button
-                            onClick={() => setShowAddModal(false)}
-                            variant="outlined"
-                            disabled={isLoadingAdd}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            onClick={handleAddClient}
-                            variant="contained"
-                            disabled={isLoadingAdd}
-                            sx={{ 
-                                minWidth: 120,
-                                bgcolor: 'success.main',
-                                '&:hover': {
-                                    bgcolor: 'success.dark'
-                                }
-                            }}
-                        >
-                            {isLoadingAdd ? (
-                                <>
-                                    <CircularProgress size={20} sx={{ mr: 1, color: 'white' }} />
-                                    Saving...
-                                </>
-                            ) : (
-                                'Add Client'
-                            )}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </div>
             {renderDeleteConfirmModal()}
 

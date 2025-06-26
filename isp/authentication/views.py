@@ -16,8 +16,9 @@ from inertia import inertia, render
 
 import json
 import uuid
+from django.utils.text import slugify
 
-from isp.models import User
+from isp.models import User, Company
 
 
 @csrf_exempt
@@ -46,12 +47,17 @@ def login_view(request):
                 if not remember:
                     request.session.set_expiry(0)
 
+                # Check if user has a company, if not redirect to company setup
+                redirect_url = 'dashboard:overview'
+                if not user.company:
+                    redirect_url = 'auth:company_setup'
+
                 if request.content_type == 'application/json':
                     return JsonResponse({
                         'success': True,
-                        'redirect': reverse('dashboard:overview')
+                        'redirect': reverse(redirect_url)
                     })
-                return redirect('dashboard:overview')
+                return redirect(redirect_url)
             else:
                 error_msg = 'Invalid email or password'
                 if request.content_type == 'application/json':
@@ -128,9 +134,9 @@ def register_view(request):
         if request.content_type == 'application/json':
             return JsonResponse({
                 'success': True,
-                'redirect': reverse('dashboard:overview')
+                'redirect': reverse('auth:company_setup')
             })
-        return redirect('dashboard:overview')
+        return redirect('auth:company_setup')
     return JsonResponse({})
 
 
@@ -181,6 +187,7 @@ def password_reset_view(request):
             return inertia(request, 'auth/forgot-password', {
                 'status': 'We have emailed your password reset link!'
             })
+    return JsonResponse({})
 
 
 @csrf_exempt
@@ -251,16 +258,17 @@ def password_reset_confirm_view(request):
             error = 'Invalid reset link'
             if request.content_type == 'application/json':
                 return JsonResponse({'success': False, 'error': error})
-            return inertia(request, 'auth/reset-password', {
+            return render(request, 'auth/reset-password', {
                 'errors': {'token': [error]},
                 'uid': uid,
                 'token': token
             })
+    return JsonResponse({})
 
 
 @login_required
 def profile_view(request):
-    return inertia(request, 'auth/profile', {
+    return render(request, 'auth/profile', {
         'user': {
             'name': request.user.get_full_name() or request.user.username,
             'email': request.user.email,
@@ -272,7 +280,7 @@ def profile_view(request):
 @csrf_exempt
 def change_password_view(request):
     if request.method == 'GET':
-        return inertia(request, 'auth/confirm-password')
+        return render(request, 'auth/confirm-password')
 
     if request.method == 'POST':
         if request.content_type == 'application/json':
@@ -315,3 +323,126 @@ def change_password_view(request):
 
         messages.success(request, 'Password changed successfully')
         return redirect('auth:profile')
+    return JsonResponse({})
+
+
+@login_required
+@csrf_exempt
+def company_setup_view(request):
+    """Handle company setup for new ISP users"""
+
+    # If user already has a company, redirect to dashboard
+    if request.user.company:
+        return redirect('dashboard:overview')
+
+    if request.method == 'GET':
+        return render(request, 'auth/company-setup', {
+            'user': {
+                'name': request.user.get_full_name() or request.user.username,
+                'email': request.user.email,
+                'phone': request.user.email,
+            },
+            'currencies': [
+                {'value': 'KES', 'label': 'Kenyan Shilling (KES)'},
+                {'value': 'UGX', 'label': 'Ugandan Shilling (UGX)'},
+                {'value': 'TZS', 'label': 'Tanzanian Shilling (TZS)'},
+            ],
+            'billing_cycles': [
+                {'value': 'monthly', 'label': 'Monthly'},
+                {'value': 'quarterly', 'label': 'Quarterly'},
+                {'value': 'yearly', 'label': 'Yearly'},
+            ]
+        })
+
+    if request.method == 'POST':
+        if request.content_type == 'application/json':
+            data = json.loads(request.body)
+        else:
+            data = request.POST
+
+        # Extract form data
+        company_name = data.get('company_name')
+        email = data.get('email')
+        phone = data.get('phone')
+        address = data.get('address')
+        website = data.get('website')
+        license_number = data.get('license_number')
+        tax_id = data.get('tax_id')
+        currency = data.get('currency', 'USD')
+        billing_cycle = data.get('billing_cycle', 'monthly')
+
+        errors = {}
+
+        # Validation
+        if not company_name:
+            errors['company_name'] = ['Company name is required']
+        elif Company.objects.filter(name=company_name).exists():
+            errors['company_name'] = ['A company with this name already exists']
+
+        if not email:
+            errors['email'] = ['Company email is required']
+
+        if not phone:
+            errors['phone'] = ['Company phone is required']
+
+        if not address:
+            errors['address'] = ['Company address is required']
+
+
+        if errors:
+            if request.content_type == 'application/json':
+                return JsonResponse({'success': False, 'errors': errors})
+            return render(request, 'auth/company-setup', {
+                'errors': errors,
+                'user': {
+                    'name': request.user.get_full_name() or request.user.username,
+                    'email': request.user.email,
+                },
+                'currencies': [
+                    {'value': 'KES', 'label': 'Kenyan Shilling (KES)'},
+                    {'value': 'UGX', 'label': 'Ugandan Shilling (UGX)'},
+                    {'value': 'TZS', 'label': 'Tanzanian Shilling (TZS)'},
+                ],
+                'billing_cycles': [
+                    {'value': 'monthly', 'label': 'Monthly'},
+                    {'value': 'quarterly', 'label': 'Quarterly'},
+                    {'value': 'yearly', 'label': 'Yearly'},
+                ]
+            })
+
+        # Create company
+        company_slug = slugify(company_name)
+
+        # Ensure unique slug
+        counter = 1
+        original_slug = company_slug
+        while Company.objects.filter(slug=company_slug).exists():
+            company_slug = f"{original_slug}-{counter}"
+            counter += 1
+
+        company = Company.objects.create(
+            name=company_name,
+            email=email,
+            phone=phone,
+            address=address,
+            website=website or '',
+            currency=currency,
+            billing_cycle=billing_cycle,
+            is_active=True
+        )
+
+        # Associate user with the company and set as super admin
+        request.user.company = company
+        request.user.user_type = 'super_admin'
+        request.user.save()
+
+        if request.content_type == 'application/json':
+            return JsonResponse({
+                'success': True,
+                'message': 'Company setup completed successfully!',
+                'redirect': reverse('dashboard:overview')
+            })
+
+        messages.success(request, 'Company setup completed successfully! Welcome to your ISP management dashboard.')
+        return redirect('dashboard:overview')
+    return JsonResponse({})

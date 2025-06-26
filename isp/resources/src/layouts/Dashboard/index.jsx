@@ -17,14 +17,14 @@ import {handlerDrawerOpen, useGetMenuMaster} from '@/api/menu';
 // ==============================|| MAIN LAYOUT ||============================== //
 
 export default function DashboardLayout({children}) {
-    // const {pathname} = useLocation();
+    const {pathname} = useLocation();
     const {menuMasterLoading} = useGetMenuMaster();
-    // const downXL = useMediaQuery((theme) => theme.breakpoints.down('xl'));
+    const downXL = useMediaQuery((theme) => theme.breakpoints.down('xl'));
 
     // set media wise responsive drawer
-    // useEffect(() => {
-    //     handlerDrawerOpen(!downXL);
-    // }, [downXL]);
+    useEffect(() => {
+        handlerDrawerOpen(!downXL);
+    }, [downXL]);
 
     if (menuMasterLoading) return <Loader/>;
 

@@ -10,6 +10,7 @@ app_name = 'api'
 # DRF Router for ViewSets
 router = DefaultRouter()
 router.register(r'customers', views.CustomerViewSet, basename='customer')
+router.register(r'users', views.UserViewSet, basename='users')
 router.register(r'packages', views.PackageViewSet, basename='package')
 router.register(r'subscriptions', views.SubscriptionViewSet, basename='subscription')
 

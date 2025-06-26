@@ -154,10 +154,11 @@ const DashboardContent: React.FC<DashboardProps> = ({
                                                         }
                                                     }) => {
     const MetricCard = ({title, value, icon: Icon, trend, trendValue, color = "blue"}: any) => (
-        <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+        <div
+            className="bg-white rounded-md shadow-sm border border-gray-200 px-6 py-1 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 rounded-lg bg-${color}-50`}>
-                    <Icon className={`h-6 w-6 text-${color}-600`}/>
+                <div className={`p-2 shadow-lg rounded-lg bg-black`}>
+                    <Icon className={`h-6 w-6 text-white`}/>
                 </div>
                 <div className={`flex items-center text-sm ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
                     {trend === 'up' ? <ArrowUpRight className="h-4 w-4 mr-1"/> :
@@ -195,14 +196,8 @@ const DashboardContent: React.FC<DashboardProps> = ({
     };
 
     return (
-        <div className="p-2 bg-gray-50 min-h-screen">
-            {/* Header */}
-            {/*<div className="mb-8">*/}
-            {/*    <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>*/}
-            {/*    <p className="text-gray-600">Monitor your ISP operations and network performance</p>*/}
-            {/*</div>*/}
-
-            <div className="rounded relative bg-gradient-to-r mb-5 from-green-500 to-green-50 h-[200px] w-full">
+        <div className="p-2 bg-[#F5F5F5] min-h-screen">
+            <div className="rounded relative bg-gradient-to-r mb-5 from-green-800 to-green-50 h-[200px] w-full">
                 <div className="absolute right-0 h-full p-8  ">
                     <img className={"h-full"} src={(url(dashImage))} alt=""/>
                 </div>
@@ -217,7 +212,7 @@ const DashboardContent: React.FC<DashboardProps> = ({
                             ligula ligula eu est.
                         </Typography>
                         <div>
-                            <Button variant="contained" color="primary" className="mt-4">Quick action</Button>
+                            <Button variant="contained" className="mt-4 !bg-black">Quick action</Button>
                         </div>
                     </div>
                 </div>
@@ -243,7 +238,7 @@ const DashboardContent: React.FC<DashboardProps> = ({
                 {/*/>*/}
                 <MetricCard
                     title="Monthly Revenue"
-                    value={`$${metrics.monthlyRevenue}`}
+                    value={`KES ${metrics.monthlyRevenue}`}
                     icon={DollarSign}
                     trend="up"
                     trendValue="15.3"
