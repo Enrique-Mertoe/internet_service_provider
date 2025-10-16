@@ -388,11 +388,7 @@ install_node_dependencies() {
     sudo -u "$APP_USER" bash << EOF
 cd "$APP_DIR" || exit 1
 
-if [ -d "node_modules" ]; then
-    npm ci --silent
-else
-    npm install --silent
-fi
+
 
 echo "Node.js dependencies installed"
 EOF
