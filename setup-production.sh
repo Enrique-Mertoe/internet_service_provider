@@ -274,9 +274,11 @@ create_directories() {
     # Create app directories
     mkdir -p "$APP_DIR/staticfiles"
     mkdir -p "$APP_DIR/media"
+    mkdir -p "$APP_DIR/logs"
 
     # Set permissions
     chown -R "$APP_USER:$APP_USER" "$LOG_DIR"
+    chown -R "$APP_USER:$APP_USER" "$APP_DIR/logs"
     chown -R "$APP_USER:$APP_USER" "$APP_DIR/staticfiles" 2>/dev/null || true
     chown -R "$APP_USER:$APP_USER" "$APP_DIR/media" 2>/dev/null || true
 
@@ -534,7 +536,7 @@ Group=$APP_USER
 WorkingDirectory=$APP_DIR
 Environment=PATH=$VENV_DIR/bin
 Environment=DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
-ExecStart=$VENV_DIR/bin/gunicorn --bind 127.0.0.1:8000 --workers 3 --threads 2 --timeout 120 --access-logfile $LOG_DIR/gunicorn/access.log --error-logfile $LOG_DIR/gunicorn/error.log $wsgi_module
+ExecStart=$VENV_DIR/bin/gunicorn --bind 127.0.0.1:8000 --workers 3 --threads 2 --timeout 120 --log-level info --capture-output --enable-stdio-inheritance --access-logfile $LOG_DIR/gunicorn/access.log --error-logfile $LOG_DIR/gunicorn/error.log $wsgi_module
 ExecReload=/bin/kill -s HUP \$MAINPID
 Restart=always
 RestartSec=10
