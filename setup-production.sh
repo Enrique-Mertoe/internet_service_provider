@@ -58,11 +58,16 @@ show_help() {
 ${CYAN}ISP Application Setup Script${NC}
 
 ${YELLOW}USAGE:${NC}
+    sudo $0 [MODE]
     sudo $0 [OPTIONS]
 
-${YELLOW}OPTIONS:${NC}
+${YELLOW}MODES:${NC}
+    ${GREEN}--all${NC}                   Run complete setup (default - includes file copy)
+    ${GREEN}--update${NC}                Update deployment (copy files, rebuild, restart)
+    ${GREEN}--sync${NC}                  Only sync files from source to /opt/isp_app
+
+${YELLOW}COMPONENT OPTIONS:${NC}
     ${GREEN}--help, -h${NC}              Show this help message
-    ${GREEN}--all${NC}                   Run complete setup (default)
     ${GREEN}--packages${NC}              Install system packages only
     ${GREEN}--user${NC}                  Create application user only
     ${GREEN}--directories${NC}           Create directories only
@@ -73,11 +78,22 @@ ${YELLOW}OPTIONS:${NC}
     ${GREEN}--init-db${NC}               Initialize Django database only
     ${GREEN}--start-services${NC}        Start services only
 
+${YELLOW}TYPICAL WORKFLOW:${NC}
+    # First time setup
+    sudo $0 --all
+
+    # After git pull or .env changes
+    sudo $0 --update
+
+    # Only sync files (no rebuild)
+    sudo $0 --sync
+
 ${YELLOW}NOTES:${NC}
     - Script can be run multiple times safely
-    - Copies files from current directory to /opt/isp_app
+    - ALWAYS copies files from current directory to /opt/isp_app
     - Creates dedicated app user and runs as that user
     - Uses PostgreSQL and Redis
+    - --update mode: copies files, rebuilds frontend, restarts service
 
 EOF
 }
@@ -586,12 +602,76 @@ start_services() {
     fi
 }
 
+# Update mode - for after git pull or .env changes
+update_deployment() {
+    print_header "Updating Deployment"
+
+    # Always copy files first
+    copy_application_files
+    check_env_file
+
+    # Detect Django settings
+    detect_django_settings
+
+    # Install/update Python dependencies
+    print_status "Updating Python dependencies..."
+    sudo -u "$APP_USER" -H bash << EOF
+cd "$APP_DIR" || exit 1
+source "$VENV_DIR/bin/activate" || exit 1
+pip install -r requirements.txt
+EOF
+
+    # Install/update Node dependencies and rebuild
+    if [[ -f "$APP_DIR/package.json" ]]; then
+        print_status "Updating Node dependencies..."
+        sudo -u "$APP_USER" bash << EOF
+cd "$APP_DIR" || exit 1
+npm install --silent
+EOF
+        build_frontend
+    fi
+
+    # Run migrations
+    print_status "Running migrations..."
+    sudo -u "$APP_USER" bash << EOF
+cd "$APP_DIR"
+source "$VENV_DIR/bin/activate"
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput --clear
+EOF
+
+    # Restart service
+    if systemctl is-active --quiet isp-app; then
+        print_status "Restarting service..."
+        systemctl restart isp-app
+        sleep 3
+        if systemctl is-active --quiet isp-app; then
+            print_success "Service restarted successfully!"
+        else
+            print_error "Service failed to restart!"
+            print_status "Check logs with: journalctl -u isp-app -xe"
+        fi
+    else
+        print_warning "Service not running, starting it..."
+        systemctl start isp-app
+    fi
+
+    print_success "Deployment updated!"
+}
+
 # Main execution function
 execute_setup() {
-    local run_all=true
+    local run_all=false
+    local run_update=false
+    local run_sync=false
     local components=()
 
-    # Parse arguments
+    # Parse arguments - default to --all if no args
+    if [[ $# -eq 0 ]]; then
+        run_all=true
+    fi
+
     while [[ $# -gt 0 ]]; do
         case $1 in
             --help|-h)
@@ -602,8 +682,15 @@ execute_setup() {
                 run_all=true
                 shift
                 ;;
+            --update)
+                run_update=true
+                shift
+                ;;
+            --sync)
+                run_sync=true
+                shift
+                ;;
             --packages|--user|--directories|--python-app|--environment|--nginx|--systemd|--init-db|--start-services)
-                run_all=false
                 components+=("${1#--}")
                 shift
                 ;;
@@ -619,6 +706,22 @@ execute_setup() {
     check_root
     detect_os
 
+    # Sync mode - only copy files
+    if [[ "$run_sync" == true ]]; then
+        print_status "Syncing files only..."
+        copy_application_files
+        check_env_file
+        print_success "Files synced to $APP_DIR"
+        exit 0
+    fi
+
+    # Update mode - copy files and update deployment
+    if [[ "$run_update" == true ]]; then
+        update_deployment
+        exit 0
+    fi
+
+    # Full setup mode
     if [[ "$run_all" == true ]]; then
         print_status "Running complete setup..."
         copy_application_files
@@ -635,8 +738,13 @@ execute_setup() {
         setup_systemd_services
         initialize_database
         start_services
-    else
+    # Component mode
+    elif [[ ${#components[@]} -gt 0 ]]; then
         print_status "Running selected components: ${components[*]}"
+
+        # Always copy files first when running components
+        copy_application_files
+        check_env_file
 
         # Detect Django settings if needed
         if [[ " ${components[*]} " =~ " systemd " ]] || [[ " ${components[*]} " =~ " init-db " ]]; then
