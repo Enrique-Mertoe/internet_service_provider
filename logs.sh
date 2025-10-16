@@ -18,6 +18,8 @@ NC='\033[0m' # No Color
 SERVICE_NAME="isp-app"
 APP_DIR="/opt/isp_app"
 LOG_DIR="/var/log/isp_app"
+GUNICORN_ACCESS_LOG="$LOG_DIR/gunicorn/access.log"
+GUNICORN_ERROR_LOG="$LOG_DIR/gunicorn/error.log"
 
 print_header() {
     clear
@@ -68,23 +70,65 @@ show_status() {
     echo ""
 }
 
-# Stream live logs (Gunicorn/Django application logs)
+# Stream live Gunicorn logs
 stream_logs() {
     print_header
-    echo -e "${MAGENTA}=== Live Application Logs (Press Ctrl+C to exit) ===${NC}\n"
-    print_info "Following Gunicorn/Django application logs"
-    print_info "Shows: HTTP requests, errors, warnings, and application output"
+    echo -e "${MAGENTA}=== Live Gunicorn Logs (Press Ctrl+C to exit) ===${NC}\n"
+
+    # Check which log files exist
+    local has_access=false
+    local has_error=false
+
+    if [ -f "$GUNICORN_ACCESS_LOG" ]; then
+        has_access=true
+        print_success "Access log found: $GUNICORN_ACCESS_LOG"
+    fi
+
+    if [ -f "$GUNICORN_ERROR_LOG" ]; then
+        has_error=true
+        print_success "Error log found: $GUNICORN_ERROR_LOG"
+    fi
+
+    if [ "$has_access" = false ] && [ "$has_error" = false ]; then
+        print_error "No Gunicorn log files found!"
+        print_info "Expected locations:"
+        echo "  - $GUNICORN_ACCESS_LOG"
+        echo "  - $GUNICORN_ERROR_LOG"
+        echo ""
+        print_warning "Falling back to systemd journal logs..."
+        echo ""
+        sudo journalctl -u "$SERVICE_NAME" -f --no-pager
+        return
+    fi
+
+    echo ""
+    print_info "Following Gunicorn logs (both access and error)"
+    print_info "Access log: HTTP requests (GET, POST, etc.)"
+    print_info "Error log: Application errors, exceptions, Django output"
     echo ""
 
-    # Color-code different log levels
-    sudo journalctl -u "$SERVICE_NAME" -f --no-pager | sed \
-        -e "s/\(ERROR\|CRITICAL\|Exception\|Traceback\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g" \
-        -e "s/\(WARNING\|WARN\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
-        -e "s/\(INFO\)/$(printf '\033[1;36m')\1$(printf '\033[0m')/g" \
-        -e "s/\(GET\|POST\|PUT\|DELETE\|PATCH\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
-        -e "s/\(200\|201\|204\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
-        -e "s/\(400\|401\|403\|404\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
-        -e "s/\(500\|502\|503\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g"
+    # Follow both files simultaneously with color coding
+    if [ "$has_access" = true ] && [ "$has_error" = true ]; then
+        sudo tail -f "$GUNICORN_ACCESS_LOG" "$GUNICORN_ERROR_LOG" 2>/dev/null | sed \
+            -e "s/\(ERROR\|CRITICAL\|Exception\|Traceback\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g" \
+            -e "s/\(WARNING\|WARN\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+            -e "s/\(INFO\)/$(printf '\033[1;36m')\1$(printf '\033[0m')/g" \
+            -e "s/\(GET\|POST\|PUT\|DELETE\|PATCH\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+            -e "s/\(\" 200\|\" 201\|\" 204\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+            -e "s/\(\" 400\|\" 401\|\" 403\|\" 404\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+            -e "s/\(\" 500\|\" 502\|\" 503\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g"
+    elif [ "$has_access" = true ]; then
+        sudo tail -f "$GUNICORN_ACCESS_LOG" 2>/dev/null | sed \
+            -e "s/\(GET\|POST\|PUT\|DELETE\|PATCH\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+            -e "s/\(\" 200\|\" 201\|\" 204\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+            -e "s/\(\" 400\|\" 401\|\" 403\|\" 404\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+            -e "s/\(\" 500\|\" 502\|\" 503\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g"
+    else
+        sudo tail -f "$GUNICORN_ERROR_LOG" 2>/dev/null | sed \
+            -e "s/\(ERROR\|CRITICAL\|Exception\|Traceback\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g" \
+            -e "s/\(WARNING\|WARN\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+            -e "s/\(INFO\)/$(printf '\033[1;36m')\1$(printf '\033[0m')/g"
+    fi
 }
 
 # Show recent logs
@@ -273,9 +317,42 @@ show_menu() {
 check_service
 
 # Parse command line arguments
-case "${1:-menu}" in
+case "${1:-follow}" in
     follow|stream|live)
         stream_logs
+        ;;
+    access)
+        # Show only access logs (HTTP requests)
+        if [ -f "$GUNICORN_ACCESS_LOG" ]; then
+            print_header
+            echo -e "${MAGENTA}=== Gunicorn Access Log (HTTP Requests) ===${NC}\n"
+            print_info "Following: $GUNICORN_ACCESS_LOG"
+            echo ""
+            sudo tail -f "$GUNICORN_ACCESS_LOG" | sed \
+                -e "s/\(GET\|POST\|PUT\|DELETE\|PATCH\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+                -e "s/\(\" 200\|\" 201\|\" 204\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+                -e "s/\(\" 400\|\" 401\|\" 403\|\" 404\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+                -e "s/\(\" 500\|\" 502\|\" 503\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g"
+        else
+            print_error "Access log not found: $GUNICORN_ACCESS_LOG"
+            exit 1
+        fi
+        ;;
+    error)
+        # Show only error logs
+        if [ -f "$GUNICORN_ERROR_LOG" ]; then
+            print_header
+            echo -e "${MAGENTA}=== Gunicorn Error Log (Errors & Django Output) ===${NC}\n"
+            print_info "Following: $GUNICORN_ERROR_LOG"
+            echo ""
+            sudo tail -f "$GUNICORN_ERROR_LOG" | sed \
+                -e "s/\(ERROR\|CRITICAL\|Exception\|Traceback\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g" \
+                -e "s/\(WARNING\|WARN\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+                -e "s/\(INFO\)/$(printf '\033[1;36m')\1$(printf '\033[0m')/g"
+        else
+            print_error "Error log not found: $GUNICORN_ERROR_LOG"
+            exit 1
+        fi
         ;;
     tail|recent)
         show_recent "${2:-100}"
@@ -309,22 +386,29 @@ case "${1:-menu}" in
     help|--help|-h)
         print_header
         echo -e "${YELLOW}Usage:${NC}"
-        echo "  $0                      - Interactive menu (default)"
-        echo "  $0 follow               - Stream live logs (Ctrl+C to exit)"
-        echo "  $0 tail [lines]         - Show recent logs (default: 100 lines)"
+        echo "  $0                      - Stream live Gunicorn logs (default)"
+        echo "  $0 follow               - Stream both access & error logs"
+        echo "  $0 access               - Stream only access logs (HTTP requests)"
+        echo "  $0 error                - Stream only error logs (errors & Django output)"
+        echo "  $0 tail [lines]         - Show recent systemd logs (default: 100 lines)"
         echo "  $0 status               - Show service status"
         echo "  $0 errors [lines]       - Show error logs only (default: 50 lines)"
         echo "  $0 since <period>       - Show logs since time period"
         echo "  $0 grep <pattern> [lines] - Search logs for pattern"
         echo "  $0 export [filename]    - Export logs to file"
-        echo "  $0 django               - Show Django application logs"
+        echo "  $0 menu                 - Interactive menu"
         echo ""
         echo -e "${YELLOW}Examples:${NC}"
-        echo "  $0 follow"
-        echo "  $0 tail 200"
-        echo "  $0 since '2 hours ago'"
-        echo "  $0 grep 'ERROR' 500"
-        echo "  $0 export my-logs.txt"
+        echo "  $0                      # Stream all Gunicorn logs (default)"
+        echo "  $0 follow               # Same as above"
+        echo "  $0 access               # Only HTTP requests"
+        echo "  $0 error                # Only errors and Django output"
+        echo "  $0 grep 'ERROR' 500     # Search for errors"
+        echo "  $0 since '1 hour ago'   # Logs from last hour"
+        echo ""
+        echo -e "${YELLOW}Gunicorn Log Files:${NC}"
+        echo "  Access: $GUNICORN_ACCESS_LOG"
+        echo "  Error:  $GUNICORN_ERROR_LOG"
         echo ""
         ;;
     *)
