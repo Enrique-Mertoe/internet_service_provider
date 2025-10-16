@@ -183,13 +183,13 @@ server {
     }
 
     # Optional: serve static files if path exists
-    location /static/ {
-        alias /var/www/$domain/static/;
-    }
-
-    location /media/ {
-        alias /var/www/$domain/media/;
-    }
+#    location /static/ {
+#        alias /var/www/$domain/static/;
+#    }
+#
+#    location /media/ {
+#        alias /var/www/$domain/media/;
+#    }
 }
 EOF
 
