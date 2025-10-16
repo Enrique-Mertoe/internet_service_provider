@@ -275,12 +275,16 @@ create_directories() {
     mkdir -p "$APP_DIR/staticfiles"
     mkdir -p "$APP_DIR/media"
     mkdir -p "$APP_DIR/logs"
+    mkdir -p "$APP_DIR/.npm"
+    mkdir -p "$APP_DIR/.npm-global"
 
     # Set permissions
     chown -R "$APP_USER:$APP_USER" "$LOG_DIR"
     chown -R "$APP_USER:$APP_USER" "$APP_DIR/logs"
     chown -R "$APP_USER:$APP_USER" "$APP_DIR/staticfiles" 2>/dev/null || true
     chown -R "$APP_USER:$APP_USER" "$APP_DIR/media" 2>/dev/null || true
+    chown -R "$APP_USER:$APP_USER" "$APP_DIR/.npm" 2>/dev/null || true
+    chown -R "$APP_USER:$APP_USER" "$APP_DIR/.npm-global" 2>/dev/null || true
 
     # Ensure app user can access the app directory
     chgrp -R "$APP_USER" "$APP_DIR" 2>/dev/null || true
