@@ -376,26 +376,6 @@ EOF
     fi
 }
 
-install_node_dependencies() {
-    print_header "Installing Node.js dependencies"
-
-    if [[ ! -f "$APP_DIR/package.json" ]]; then
-        print_warning "No package.json found, skipping Node.js dependencies"
-        return 0
-    fi
-
-    # Run as app user
-    sudo -u "$APP_USER" bash << EOF
-cd "$APP_DIR" || exit 1
-
-
-
-echo "Node.js dependencies installed"
-EOF
-
-    print_success "Node.js dependencies installed"
-}
-
 detect_django_settings() {
     print_header "Detecting Django settings module"
 
@@ -448,7 +428,11 @@ fi
 
 # Build frontend
 echo "Building frontend assets..."
-npm install vite --save-dev
+if [ -d "node_modules" ]; then
+    npm ci --silent
+else
+    npm install --silent
+fi
 npm run build
 
 echo "Frontend built successfully"
@@ -742,7 +726,6 @@ execute_setup() {
         create_directories
         start_system_services
         install_python_app
-        install_node_dependencies
         detect_django_settings
         build_frontend
         setup_nginx
@@ -769,7 +752,6 @@ execute_setup() {
                 directories) create_directories ;;
                 python-app)
                     install_python_app
-                    install_node_dependencies
                     ;;
                 environment) detect_django_settings ;;
                 nginx) setup_nginx ;;
