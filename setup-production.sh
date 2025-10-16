@@ -452,6 +452,7 @@ fi
 
 # Build frontend
 echo "Building frontend assets..."
+npm install vite --save-dev
 npm run build
 
 echo "Frontend built successfully"
