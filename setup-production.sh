@@ -432,6 +432,10 @@ build_frontend() {
 cd "$APP_DIR" || exit 1
 source "$VENV_DIR/bin/activate" || exit 1
 
+# Set npm cache and config to app directory to avoid permission issues
+export npm_config_cache="$APP_DIR/.npm"
+export npm_config_prefix="$APP_DIR/.npm-global"
+
 # Generate routes if command exists (optional, skip if fails)
 if grep -q "routes:generate" package.json; then
     echo "Generating Django routes..."
