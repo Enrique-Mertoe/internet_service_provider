@@ -24,7 +24,6 @@ SECRET_KEY = 'django-insecure-@8wdhz+quloymoib01w%bl_gfo%kcbi2ex7j&rvk-prbq76en)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('APP_DEBUG', cast=bool)
-print("dd",DEBUG)
 
 ALLOWED_HOSTS = ["*"]
 ALLOWED_ORIGINS = ["*"]
@@ -230,7 +229,12 @@ SUPPORT_EMAIL = "support@lomtechnology.com"
 # Create logs directory if it doesn't exist
 import os
 LOGS_DIR = BASE_DIR / 'logs'
-os.makedirs(LOGS_DIR, exist_ok=True)
+try:
+    os.makedirs(LOGS_DIR, exist_ok=True)
+    use_file_logging = True
+except (PermissionError, OSError):
+    # If we can't create the logs directory, just use console logging
+    use_file_logging = False
 
 # Logging configuration
 LOGGING = {
@@ -251,33 +255,41 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
-        'file': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': str(LOGS_DIR / 'django.log'),
-            'maxBytes': 10485760,  # 10MB
-            'backupCount': 5,
-            'formatter': 'verbose',
-        },
     },
     'root': {
-        'handlers': ['console', 'file'],
+        'handlers': ['console'],
         'level': 'INFO',
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
         'django.request': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': False,
         },
         'django.server': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'INFO',
             'propagate': False,
         },
     },
 }
+
+# Add file handler if logs directory is writable
+if use_file_logging:
+    LOGGING['handlers']['file'] = {
+        'class': 'logging.handlers.RotatingFileHandler',
+        'filename': str(LOGS_DIR / 'django.log'),
+        'maxBytes': 10485760,  # 10MB
+        'backupCount': 5,
+        'formatter': 'verbose',
+    }
+    # Add file handler to all loggers
+    LOGGING['root']['handlers'].append('file')
+    LOGGING['loggers']['django']['handlers'].append('file')
+    LOGGING['loggers']['django.request']['handlers'].append('file')
+    LOGGING['loggers']['django.server']['handlers'].append('file')
