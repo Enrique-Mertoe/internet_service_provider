@@ -1,93 +1,169 @@
 #!/bin/bash
 
-################################################################################
-# ISP Production Setup Script
-# One script to deploy and run as a system service
-################################################################################
+# =============================================================================
+# ISP Django Application - Production Setup Script
+# This script sets up the ISP application environment with PostgreSQL & Redis
+# Usage: sudo ./setup-production.sh [OPTIONS]
+# =============================================================================
 
-set -e
+set -e  # Exit on any error
 
-# Colors
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
-NC='\033[0m'
+NC='\033[0m' # No Color
 
-# Get script directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+# Configuration
+APP_NAME="isp_app"
+APP_USER="isp_user"
+CURRENT_DIR="$(pwd)"
+APP_DIR="/opt/isp_app"  # Production directory
+SOURCE_DIR="$CURRENT_DIR"  # Where the script is run from
+VENV_DIR="$APP_DIR/venv"
+LOG_DIR="/var/log/isp_app"
+CONFIG_DIR="/etc/isp_app"
+SYSTEMD_DIR="/etc/systemd/system"
 
-# Get current user (before sudo)
-if [ -n "$SUDO_USER" ]; then
-    CURRENT_USER="$SUDO_USER"
-else
-    CURRENT_USER=$(whoami)
-fi
+# Environment variables from .env
+ENV_FILE="$APP_DIR/.env"
 
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-log_header() { echo -e "${CYAN}=== $1 ===${NC}"; }
+# Django settings module
+DJANGO_SETTINGS_MODULE=""
 
-echo "=========================================="
-echo "   ISP Production Setup"
-echo "=========================================="
-echo ""
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
 
-# Check if running as root
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+print_header() {
+    echo -e "${CYAN}=== $1 ===${NC}"
+}
+
+show_help() {
+    cat << EOF
+${CYAN}ISP Application Setup Script${NC}
+
+${YELLOW}USAGE:${NC}
+    sudo $0 [OPTIONS]
+
+${YELLOW}OPTIONS:${NC}
+    ${GREEN}--help, -h${NC}              Show this help message
+    ${GREEN}--all${NC}                   Run complete setup (default)
+    ${GREEN}--packages${NC}              Install system packages only
+    ${GREEN}--user${NC}                  Create application user only
+    ${GREEN}--directories${NC}           Create directories only
+    ${GREEN}--python-app${NC}            Install Python application only
+    ${GREEN}--environment${NC}           Setup environment configuration only
+    ${GREEN}--nginx${NC}                 Setup Nginx only
+    ${GREEN}--systemd${NC}               Setup systemd services only
+    ${GREEN}--init-db${NC}               Initialize Django database only
+    ${GREEN}--start-services${NC}        Start services only
+
+${YELLOW}NOTES:${NC}
+    - Script can be run multiple times safely
+    - Copies files from current directory to /opt/isp_app
+    - Creates dedicated app user and runs as that user
+    - Uses PostgreSQL and Redis
+
+EOF
+}
+
 check_root() {
     if [[ $EUID -ne 0 ]]; then
-        log_error "This script must be run as root (use sudo)"
+        print_error "This script must be run as root (use sudo)"
         exit 1
     fi
 }
 
-# Detect OS
+copy_application_files() {
+    print_header "Copying Application Files"
+
+    # Check if rsync is installed
+    if ! command -v rsync &> /dev/null; then
+        print_status "Installing rsync..."
+        apt install -y rsync || yum install -y rsync
+    fi
+
+    # Create app directory if it doesn't exist
+    if [[ ! -d "$APP_DIR" ]]; then
+        print_status "Creating directory: $APP_DIR"
+        mkdir -p "$APP_DIR"
+    fi
+
+    print_status "Copying files from $SOURCE_DIR to $APP_DIR..."
+
+    # Copy all files except venv, node_modules, __pycache__, and .git
+    rsync -av --delete \
+          --exclude='venv' \
+          --exclude='.venv' \
+          --exclude='node_modules' \
+          --exclude='__pycache__' \
+          --exclude='*.pyc' \
+          --exclude='.git' \
+          --exclude='*.log' \
+          --exclude='db.sqlite3' \
+          --exclude='staticfiles' \
+          --exclude='isp/static/dist' \
+          "$SOURCE_DIR/" "$APP_DIR/" || {
+        print_error "Failed to copy application files"
+        exit 1
+    }
+
+    print_success "Application files copied to $APP_DIR"
+}
+
+check_env_file() {
+    print_header "Checking .env file"
+
+    # Check if .env exists in source
+    if [[ ! -f "$SOURCE_DIR/.env" ]] && [[ ! -f "$SOURCE_DIR/.env.example" ]]; then
+        print_error ".env or .env.example file not found in source directory"
+        exit 1
+    fi
+
+    # Copy .env if it exists, otherwise use .env.example
+    if [[ -f "$SOURCE_DIR/.env" ]]; then
+        cp "$SOURCE_DIR/.env" "$ENV_FILE"
+        print_success ".env file copied to $APP_DIR"
+    elif [[ -f "$SOURCE_DIR/.env.example" ]]; then
+        cp "$SOURCE_DIR/.env.example" "$ENV_FILE"
+        print_warning "Created .env from .env.example"
+        print_warning "Please configure $ENV_FILE before running the app"
+    fi
+}
+
 detect_os() {
     if [[ -f /etc/os-release ]]; then
         . /etc/os-release
         OS=$NAME
         VER=$VERSION_ID
     else
-        log_error "Cannot detect operating system"
+        print_error "Cannot detect operating system"
         exit 1
     fi
-    log_info "Detected OS: $OS $VER"
+
+    print_status "Detected OS: $OS $VER"
 }
 
-# Check if running with proper mode
-if [ "$1" == "install" ]; then
-    MODE="install"
-    check_root
-    detect_os
-elif [ "$1" == "update" ]; then
-    MODE="update"
-    check_root
-elif [ "$1" == "service" ]; then
-    MODE="service"
-    check_root
-else
-    echo "Usage: sudo $0 {install|update|service}"
-    echo ""
-    echo "  install  - First time setup (system packages + deploy + service)"
-    echo "  update   - Update deployment (pull, build, migrate, restart)"
-    echo "  service  - Only install/reinstall systemd service"
-    echo ""
-    exit 1
-fi
-
-# Function: Install system packages
 install_system_packages() {
-    log_header "Installing System Packages"
+    print_header "Installing system packages"
 
     if [[ "$OS" == *"Ubuntu"* ]] || [[ "$OS" == *"Debian"* ]]; then
-        log_info "Updating package lists..."
-        apt update -qq
-
-        log_info "Installing required packages..."
+        apt update
         apt install -y \
             python3 \
             python3-pip \
@@ -108,10 +184,10 @@ install_system_packages() {
             libffi-dev \
             pkg-config \
             supervisor \
-            logrotate
+            logrotate \
+            rsync
 
     elif [[ "$OS" == *"CentOS"* ]] || [[ "$OS" == *"Red Hat"* ]] || [[ "$OS" == *"Rocky"* ]]; then
-        log_info "Installing required packages..."
         yum update -y
         yum groupinstall -y "Development Tools"
         yum install -y \
@@ -128,21 +204,75 @@ install_system_packages() {
             curl \
             wget \
             openssl-devel \
-            libffi-devel
+            libffi-devel \
+            rsync
 
         # Initialize PostgreSQL on CentOS/RHEL
         postgresql-setup initdb || true
     else
-        log_error "Unsupported operating system: $OS"
+        print_error "Unsupported operating system: $OS"
         exit 1
     fi
 
-    log_success "System packages installed"
+    print_success "System packages installed"
 }
 
-# Function: Start required services
+create_user() {
+    print_header "Creating application user"
+
+    if ! id "$APP_USER" &>/dev/null; then
+        # Create system user without login
+        useradd --system --shell /bin/bash --no-create-home "$APP_USER"
+        usermod -a -G www-data "$APP_USER" 2>/dev/null || true
+        print_success "User $APP_USER created"
+    else
+        print_warning "User $APP_USER already exists"
+    fi
+
+    # Ensure user has access to app directory
+    if [[ -d "$APP_DIR" ]]; then
+        chown -R "$APP_USER:$APP_USER" "$APP_DIR" 2>/dev/null || true
+        chmod -R 755 "$APP_DIR"
+    fi
+}
+
+create_directories() {
+    print_header "Creating application directories"
+
+    # Verify APP_DIR exists
+    if [[ ! -d "$APP_DIR" ]]; then
+        print_error "Application directory does not exist: $APP_DIR"
+        print_error "Files should be copied first"
+        exit 1
+    fi
+
+    print_status "Application directory: $APP_DIR"
+
+    # Create system directories
+    mkdir -p "$LOG_DIR"
+    mkdir -p "$CONFIG_DIR"
+    mkdir -p "$LOG_DIR/nginx"
+    mkdir -p "$LOG_DIR/gunicorn"
+    mkdir -p "$CONFIG_DIR/nginx"
+
+    # Create app directories
+    mkdir -p "$APP_DIR/staticfiles"
+    mkdir -p "$APP_DIR/media"
+
+    # Set permissions
+    chown -R "$APP_USER:$APP_USER" "$LOG_DIR"
+    chown -R "$APP_USER:$APP_USER" "$APP_DIR/staticfiles" 2>/dev/null || true
+    chown -R "$APP_USER:$APP_USER" "$APP_DIR/media" 2>/dev/null || true
+
+    # Ensure app user can access the app directory
+    chgrp -R "$APP_USER" "$APP_DIR" 2>/dev/null || true
+    chmod -R g+rX "$APP_DIR" 2>/dev/null || true
+
+    print_success "Directories created and permissions set"
+}
+
 start_system_services() {
-    log_header "Starting System Services"
+    print_header "Starting system services"
 
     # PostgreSQL
     systemctl start postgresql || systemctl start postgresql@*-main || true
@@ -152,131 +282,159 @@ start_system_services() {
     systemctl start redis-server || systemctl start redis || true
     systemctl enable redis-server || systemctl enable redis || true
 
-    log_success "System services started"
+    print_success "System services started"
 }
 
-# Function: Deploy application
-deploy_app() {
-    log_header "Deploying Application"
+install_python_app() {
+    print_header "Installing Python application"
 
-    # Check .env file
-    if [ ! -f ".env" ]; then
-        if [ -f ".env.example" ]; then
-            log_warning "Creating .env from .env.example"
-            cp .env.example .env
-            chown $CURRENT_USER:$CURRENT_USER .env
-            log_error "Please configure .env file and run again"
-            exit 1
-        fi
+    # Ensure app directory exists
+    if [[ ! -d "$APP_DIR" ]]; then
+        print_error "Application directory does not exist: $APP_DIR"
+        exit 1
     fi
 
-    # Setup Python virtual environment as the actual user
-    if [ ! -d ".venv" ]; then
-        log_info "Creating virtual environment..."
-        sudo -u $CURRENT_USER python3 -m venv .venv
+    # Fix ownership of app directory
+    print_status "Setting correct permissions on $APP_DIR"
+    chown -R "$APP_USER:$APP_USER" "$APP_DIR" 2>/dev/null || {
+        print_warning "Could not change ownership of $APP_DIR"
+        print_status "Attempting to continue anyway..."
+    }
 
-        # Verify venv was created
-        if [ ! -d ".venv" ]; then
-            log_error "Failed to create virtual environment"
+    # Create virtual environment if it doesn't exist
+    if [[ ! -d "$VENV_DIR" ]]; then
+        print_status "Creating virtual environment at $VENV_DIR"
+
+        # Create venv as root first, then fix permissions
+        python3 -m venv "$VENV_DIR" || {
+            print_error "Failed to create virtual environment"
             exit 1
-        fi
-    fi
+        }
 
-    # Fix ownership
-    chown -R $CURRENT_USER:$CURRENT_USER .venv 2>/dev/null || true
-
-    # Install dependencies as the actual user
-    log_info "Installing Python dependencies..."
-    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && pip install -q --upgrade pip setuptools wheel && pip install -q -r requirements.txt"
-
-    # Install Node dependencies
-    log_info "Installing Node.js dependencies..."
-    if [ -d "node_modules" ]; then
-        sudo -u $CURRENT_USER npm ci --silent
+        # Fix ownership
+        chown -R "$APP_USER:$APP_USER" "$VENV_DIR"
+        print_success "Virtual environment created"
     else
-        sudo -u $CURRENT_USER npm install --silent
+        print_warning "Virtual environment already exists"
+        chown -R "$APP_USER:$APP_USER" "$VENV_DIR"
     fi
 
-    # Generate routes
-    log_info "Generating Django routes..."
-    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && npm run routes:generate"
+    # Install dependencies
+    print_status "Installing Python packages..."
 
-    # Build Vite assets
-    log_info "Building Vite assets..."
-    sudo -u $CURRENT_USER npm run build
+    # Run as app user
+    sudo -u "$APP_USER" -H bash << EOF
+cd "$APP_DIR" || exit 1
+source "$VENV_DIR/bin/activate" || exit 1
 
-    # Run migrations
-    log_info "Running migrations..."
-    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && python manage.py migrate --noinput"
+# Upgrade pip
+pip install --upgrade pip setuptools wheel
 
-    # Collect static files
-    log_info "Collecting static files..."
-    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && python manage.py collectstatic --noinput --clear"
+# Install from requirements.txt
+if [[ -f "requirements.txt" ]]; then
+    pip install -r requirements.txt
+    echo "Requirements installed from requirements.txt"
+else
+    echo "No requirements.txt found"
+    exit 1
+fi
 
-    log_success "Application deployed successfully!"
-}
-
-# Function: Install systemd service
-install_service() {
-    log_header "Installing Systemd Service"
-
-    # Create systemd service file
-    SERVICE_FILE="/etc/systemd/system/isp-app.service"
-
-    cat << EOF > $SERVICE_FILE
-[Unit]
-Description=ISP Management Application
-After=network.target postgresql.service redis.service
-
-[Service]
-Type=notify
-User=$CURRENT_USER
-Group=$CURRENT_USER
-WorkingDirectory=$SCRIPT_DIR
-Environment="PATH=$SCRIPT_DIR/.venv/bin"
-
-ExecStart=$SCRIPT_DIR/.venv/bin/gunicorn \\
-    internet_service_provider.wsgi:application \\
-    --bind 0.0.0.0:8000 \\
-    --workers 3 \\
-    --threads 2 \\
-    --timeout 120 \\
-    --access-logfile - \\
-    --error-logfile - \\
-    --log-level info
-
-ExecReload=/bin/kill -s HUP \$MAINPID
-KillMode=mixed
-TimeoutStopSec=5
-PrivateTmp=true
-
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
+echo "Python application installed successfully"
 EOF
 
-    # Set correct permissions
-    chmod 644 $SERVICE_FILE
-
-    # Reload systemd
-    log_info "Reloading systemd..."
-    systemctl daemon-reload
-
-    # Enable service
-    log_info "Enabling service to start on boot..."
-    systemctl enable isp-app
-
-    log_success "Service installed successfully!"
+    if [[ $? -eq 0 ]]; then
+        print_success "Python application installed"
+    else
+        print_error "Failed to install Python packages"
+        exit 1
+    fi
 }
 
-# Function: Setup Nginx (optional)
+install_node_dependencies() {
+    print_header "Installing Node.js dependencies"
+
+    if [[ ! -f "$APP_DIR/package.json" ]]; then
+        print_warning "No package.json found, skipping Node.js dependencies"
+        return 0
+    fi
+
+    # Run as app user
+    sudo -u "$APP_USER" bash << EOF
+cd "$APP_DIR" || exit 1
+
+if [ -d "node_modules" ]; then
+    npm ci --silent
+else
+    npm install --silent
+fi
+
+echo "Node.js dependencies installed"
+EOF
+
+    print_success "Node.js dependencies installed"
+}
+
+detect_django_settings() {
+    print_header "Detecting Django settings module"
+
+    # Try to find Django project name
+    local project_name=""
+    if [[ -f "$APP_DIR/manage.py" ]]; then
+        project_name=$(grep "DJANGO_SETTINGS_MODULE" "$APP_DIR/manage.py" 2>/dev/null | sed -n "s/.*['\"]\\([^'\"]*\\)\\.settings['\"].*/\\1/p" | head -n1)
+    fi
+
+    if [[ -z "$project_name" ]]; then
+        # Try to find by looking for wsgi.py
+        project_name=$(find "$APP_DIR" -maxdepth 2 -name "wsgi.py" -type f 2>/dev/null | head -n1 | xargs dirname | xargs basename)
+    fi
+
+    if [[ -n "$project_name" ]]; then
+        if [[ -f "$APP_DIR/$project_name/settings.py" ]]; then
+            DJANGO_SETTINGS_MODULE="$project_name.settings"
+            print_success "Found settings: $DJANGO_SETTINGS_MODULE"
+        else
+            DJANGO_SETTINGS_MODULE="$project_name.settings"
+            print_warning "Settings file not found, using default: $DJANGO_SETTINGS_MODULE"
+        fi
+    else
+        DJANGO_SETTINGS_MODULE="internet_service_provider.settings"
+        print_warning "Could not detect Django project, using default: $DJANGO_SETTINGS_MODULE"
+    fi
+}
+
+build_frontend() {
+    print_header "Building frontend assets"
+
+    if [[ ! -f "$APP_DIR/package.json" ]]; then
+        print_warning "No package.json found, skipping frontend build"
+        return 0
+    fi
+
+    sudo -u "$APP_USER" bash << EOF
+cd "$APP_DIR" || exit 1
+source "$VENV_DIR/bin/activate" || exit 1
+
+# Generate routes if command exists
+if grep -q "routes:generate" package.json; then
+    echo "Generating Django routes..."
+    npm run routes:generate
+fi
+
+# Build frontend
+echo "Building frontend assets..."
+npm run build
+
+echo "Frontend built successfully"
+EOF
+
+    print_success "Frontend assets built"
+}
+
 setup_nginx() {
-    log_header "Setting up Nginx"
+    print_header "Setting up Nginx"
 
     # Create Nginx configuration
-    cat > /etc/nginx/sites-available/isp-app << 'EOF'
+    cat > "$CONFIG_DIR/nginx/isp_app.conf" << EOF
 upstream isp_app {
     server 127.0.0.1:8000;
 }
@@ -294,7 +452,14 @@ server {
 
     # Static files
     location /static/ {
-        alias /home/$CURRENT_USER/Music/isp/isp-main/staticfiles/;
+        alias $APP_DIR/staticfiles/;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Media files
+    location /media/ {
+        alias $APP_DIR/media/;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
@@ -302,156 +467,208 @@ server {
     # Django application
     location / {
         proxy_pass http://isp_app;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
         proxy_connect_timeout 60s;
         proxy_send_timeout 60s;
         proxy_read_timeout 60s;
     }
+
+    # Logging
+    access_log $LOG_DIR/nginx/access.log;
+    error_log $LOG_DIR/nginx/error.log;
 }
 EOF
 
-    # Enable site
-    ln -sf /etc/nginx/sites-available/isp-app /etc/nginx/sites-enabled/isp-app
+    # Link configuration
+    ln -sf "$CONFIG_DIR/nginx/isp_app.conf" /etc/nginx/sites-available/isp_app
+    ln -sf /etc/nginx/sites-available/isp_app /etc/nginx/sites-enabled/isp_app
 
     # Remove default site
     rm -f /etc/nginx/sites-enabled/default
 
-    # Test and reload nginx
-    nginx -t && systemctl reload nginx
+    # Test configuration
+    nginx -t
 
-    log_success "Nginx configured"
+    systemctl restart nginx
+    systemctl enable nginx
+
+    print_success "Nginx configured"
 }
 
-# Function: Start service
-start_service() {
-    log_info "Starting isp-app service..."
+setup_systemd_services() {
+    print_header "Setting up systemd services"
+
+    # Detect wsgi module
+    local wsgi_module=$(echo "$DJANGO_SETTINGS_MODULE" | cut -d'.' -f1).wsgi:application
+
+    # Django application service
+    cat > "$SYSTEMD_DIR/isp-app.service" << EOF
+[Unit]
+Description=ISP Django Application
+After=network.target postgresql.service redis.service
+Wants=postgresql.service redis.service
+
+[Service]
+Type=notify
+User=$APP_USER
+Group=$APP_USER
+WorkingDirectory=$APP_DIR
+Environment=PATH=$VENV_DIR/bin
+Environment=DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+ExecStart=$VENV_DIR/bin/gunicorn --bind 127.0.0.1:8000 --workers 3 --threads 2 --timeout 120 --access-logfile $LOG_DIR/gunicorn/access.log --error-logfile $LOG_DIR/gunicorn/error.log $wsgi_module
+ExecReload=/bin/kill -s HUP \$MAINPID
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    # Reload systemd and enable service
+    systemctl daemon-reload
+    systemctl enable isp-app
+
+    print_success "Systemd service configured with $DJANGO_SETTINGS_MODULE"
+}
+
+initialize_database() {
+    print_header "Initializing Django database"
+
+    sudo -u "$APP_USER" bash << EOF
+cd "$APP_DIR"
+source "$VENV_DIR/bin/activate"
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+
+# Run Django migrations
+if [ -f manage.py ]; then
+    echo "Creating migrations..."
+    python manage.py makemigrations --noinput || echo "No new migrations to create"
+
+    echo "Applying migrations..."
+    python manage.py migrate --noinput
+
+    echo "Collecting static files..."
+    python manage.py collectstatic --noinput --clear || echo "Static files collection skipped"
+
+    echo "Django database initialization completed"
+else
+    echo "manage.py not found. Please check your project structure."
+    exit 1
+fi
+EOF
+
+    print_success "Django database initialized with $DJANGO_SETTINGS_MODULE"
+}
+
+start_services() {
+    print_header "Starting services"
+
     systemctl start isp-app
-    sleep 2
 
+    # Wait for service to start
+    sleep 5
+
+    # Check service status
     if systemctl is-active --quiet isp-app; then
-        log_success "Service started successfully!"
-        echo ""
-        systemctl status isp-app --no-pager
+        print_success "ISP App service started"
     else
-        log_error "Service failed to start!"
-        systemctl status isp-app --no-pager
-        exit 1
+        print_warning "ISP App service may have issues - check logs with: journalctl -u isp-app"
+    fi
+
+    # Check nginx
+    if systemctl is-active --quiet nginx; then
+        print_success "Nginx is running"
+    else
+        print_warning "Nginx may have issues - check logs with: journalctl -u nginx"
     fi
 }
 
-# Function: Restart service
-restart_service() {
-    log_info "Restarting isp-app service..."
-    systemctl restart isp-app
-    sleep 2
+# Main execution function
+execute_setup() {
+    local run_all=true
+    local components=()
 
-    if systemctl is-active --quiet isp-app; then
-        log_success "Service restarted successfully!"
-    else
-        log_error "Service failed to restart!"
-        systemctl status isp-app --no-pager
-        exit 1
-    fi
-}
+    # Parse arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --help|-h)
+                show_help
+                exit 0
+                ;;
+            --all)
+                run_all=true
+                shift
+                ;;
+            --packages|--user|--directories|--python-app|--environment|--nginx|--systemd|--init-db|--start-services)
+                run_all=false
+                components+=("${1#--}")
+                shift
+                ;;
+            *)
+                print_error "Unknown option: $1"
+                show_help
+                exit 1
+                ;;
+        esac
+    done
 
-# Main execution based on mode
-case $MODE in
-    install)
-        log_info "Running full installation..."
-        echo ""
+    # Always run these checks first
+    check_root
+    detect_os
 
-        # Install system packages
+    if [[ "$run_all" == true ]]; then
+        print_status "Running complete setup..."
+        copy_application_files
+        check_env_file
         install_system_packages
-
-        # Start system services
+        create_user
+        create_directories
         start_system_services
+        install_python_app
+        install_node_dependencies
+        detect_django_settings
+        build_frontend
+        setup_nginx
+        setup_systemd_services
+        initialize_database
+        start_services
+    else
+        print_status "Running selected components: ${components[*]}"
 
-        # Deploy application
-        deploy_app
-
-        # Install systemd service
-        install_service
-
-        # Optional: Setup Nginx
-        read -p "Do you want to setup Nginx as reverse proxy? (y/N): " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            setup_nginx
+        # Detect Django settings if needed
+        if [[ " ${components[*]} " =~ " systemd " ]] || [[ " ${components[*]} " =~ " init-db " ]]; then
+            detect_django_settings
         fi
 
-        # Start the app service
-        start_service
+        for component in "${components[@]}"; do
+            case $component in
+                packages) install_system_packages ;;
+                user) create_user ;;
+                directories) create_directories ;;
+                python-app)
+                    install_python_app
+                    install_node_dependencies
+                    ;;
+                environment) detect_django_settings ;;
+                nginx) setup_nginx ;;
+                systemd) setup_systemd_services ;;
+                init-db) initialize_database ;;
+                start-services) start_services ;;
+            esac
+        done
+    fi
 
-        # Create superuser prompt
-        echo ""
-        read -p "Do you want to create a Django superuser? (y/N): " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            sudo -u $CURRENT_USER bash << 'SUPEREOF'
-source .venv/bin/activate
-python manage.py createsuperuser
-SUPEREOF
-        fi
+    print_header "Setup completed successfully!"
+    print_status "Your ISP application is ready at: http://localhost"
+    print_status "Application directory: $APP_DIR"
+    print_status "Check service status with: systemctl status isp-app"
+    print_status "View logs with: journalctl -u isp-app -f"
+}
 
-        echo ""
-        log_success "=========================================="
-        log_success "   Installation Complete!"
-        log_success "=========================================="
-        echo ""
-        log_info "Application URL:"
-        echo "  http://$(hostname -I | awk '{print $1}'):8000"
-        echo "  http://localhost:8000 (if Nginx: http://localhost)"
-        echo ""
-        log_info "Service Commands:"
-        echo "  Status:  sudo systemctl status isp-app"
-        echo "  Logs:    sudo journalctl -u isp-app -f"
-        echo "  Stop:    sudo systemctl stop isp-app"
-        echo "  Restart: sudo systemctl restart isp-app"
-        echo ""
-        log_info "Update Command:"
-        echo "  sudo $0 update"
-        echo ""
-        log_warning "Don't forget to configure PostgreSQL database in .env file!"
-        echo ""
-        ;;
-
-    update)
-        log_info "Running update deployment..."
-        echo ""
-
-        # Optional: Pull from git
-        if [ "$2" == "--pull" ]; then
-            log_info "Pulling latest changes..."
-            sudo -u $CURRENT_USER git pull
-        fi
-
-        # Deploy application
-        deploy_app
-
-        # Restart service if it exists
-        if systemctl list-unit-files | grep -q "isp-app.service"; then
-            restart_service
-        else
-            log_warning "Service not installed. Run 'sudo $0 install' first"
-        fi
-
-        log_success "Update complete!"
-        ;;
-
-    service)
-        log_info "Installing service only..."
-        install_service
-
-        read -p "Do you want to start the service now? (y/N): " -n 1 -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            start_service
-        else
-            log_info "Service installed but not started."
-            log_info "Start with: sudo systemctl start isp-app"
-        fi
-        ;;
-esac
+# Run setup if script is executed directly
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    execute_setup "$@"
+fi
