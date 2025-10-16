@@ -690,6 +690,14 @@ execute_setup() {
                 run_sync=true
                 shift
                 ;;
+            --rebuild-nginx)
+                # Rebuild Nginx only without file copy
+                check_root
+                detect_os
+                setup_nginx
+                print_success "Nginx configuration rebuilt!"
+                exit 0
+                ;;
             --packages|--user|--directories|--python-app|--environment|--nginx|--systemd|--init-db|--start-services)
                 components+=("${1#--}")
                 shift
