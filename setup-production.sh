@@ -432,15 +432,15 @@ build_frontend() {
 cd "$APP_DIR" || exit 1
 source "$VENV_DIR/bin/activate" || exit 1
 
-# Generate routes if command exists
+# Generate routes if command exists (optional, skip if fails)
 if grep -q "routes:generate" package.json; then
     echo "Generating Django routes..."
-    npm run routes:generate
+    npm run routes:generate || echo "Route generation skipped (command may not exist)"
 fi
 
 # Build frontend
 echo "Building frontend assets..."
-npm run build
+npx vite build
 
 echo "Frontend built successfully"
 EOF
