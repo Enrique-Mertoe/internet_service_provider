@@ -174,6 +174,12 @@ deploy_app() {
     if [ ! -d ".venv" ]; then
         log_info "Creating virtual environment..."
         sudo -u $CURRENT_USER python3 -m venv .venv
+
+        # Verify venv was created
+        if [ ! -d ".venv" ]; then
+            log_error "Failed to create virtual environment"
+            exit 1
+        fi
     fi
 
     # Fix ownership
@@ -181,28 +187,19 @@ deploy_app() {
 
     # Install dependencies as the actual user
     log_info "Installing Python dependencies..."
-    sudo -u $CURRENT_USER bash << 'PYEOF'
-source .venv/bin/activate
-pip install -q --upgrade pip setuptools wheel
-pip install -q -r requirements.txt
-PYEOF
+    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && pip install -q --upgrade pip setuptools wheel && pip install -q -r requirements.txt"
 
     # Install Node dependencies
     log_info "Installing Node.js dependencies..."
-    sudo -u $CURRENT_USER bash << 'NODEEOF'
-if [ -d "node_modules" ]; then
-    npm ci --silent
-else
-    npm install --silent
-fi
-NODEEOF
+    if [ -d "node_modules" ]; then
+        sudo -u $CURRENT_USER npm ci --silent
+    else
+        sudo -u $CURRENT_USER npm install --silent
+    fi
 
     # Generate routes
     log_info "Generating Django routes..."
-    sudo -u $CURRENT_USER bash << 'ROUTEEOF'
-source .venv/bin/activate
-npm run routes:generate
-ROUTEEOF
+    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && npm run routes:generate"
 
     # Build Vite assets
     log_info "Building Vite assets..."
@@ -210,17 +207,11 @@ ROUTEEOF
 
     # Run migrations
     log_info "Running migrations..."
-    sudo -u $CURRENT_USER bash << 'MIGRATEEOF'
-source .venv/bin/activate
-python manage.py migrate --noinput
-MIGRATEEOF
+    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && python manage.py migrate --noinput"
 
     # Collect static files
     log_info "Collecting static files..."
-    sudo -u $CURRENT_USER bash << 'STATICEOF'
-source .venv/bin/activate
-python manage.py collectstatic --noinput --clear
-STATICEOF
+    sudo -u $CURRENT_USER bash -c "cd '$SCRIPT_DIR' && source .venv/bin/activate && python manage.py collectstatic --noinput --clear"
 
     log_success "Application deployed successfully!"
 }
