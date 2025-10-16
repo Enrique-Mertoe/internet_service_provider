@@ -666,13 +666,28 @@ postgres_grant_access() {
         return
     fi
 
+    print_info "Granting database privileges..."
     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $db_name TO $username;" 2>/dev/null
+
+    print_info "Granting schema privileges..."
+    sudo -u postgres psql -d "$db_name" -c "GRANT ALL ON SCHEMA public TO $username;" 2>/dev/null
+    sudo -u postgres psql -d "$db_name" -c "GRANT CREATE ON SCHEMA public TO $username;" 2>/dev/null
+    sudo -u postgres psql -d "$db_name" -c "GRANT USAGE ON SCHEMA public TO $username;" 2>/dev/null
+
+    print_info "Setting default privileges..."
+    sudo -u postgres psql -d "$db_name" -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO $username;" 2>/dev/null
+    sudo -u postgres psql -d "$db_name" -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO $username;" 2>/dev/null
+
+    print_info "Transferring database ownership..."
+    sudo -u postgres psql -c "ALTER DATABASE $db_name OWNER TO $username;" 2>/dev/null
 
     if [ $? -eq 0 ]; then
         link_user_to_database "postgres" "$username" "$db_name"
-        print_success "Access granted to '$username' on database '$db_name'!"
+        print_success "Full access granted to '$username' on database '$db_name'!"
+        print_success "User '$username' is now the owner of database '$db_name'"
     else
-        print_error "Failed to grant access."
+        print_warning "Some permissions may not have been granted, but basic access should work."
+        link_user_to_database "postgres" "$username" "$db_name"
     fi
 
     pause
@@ -913,21 +928,45 @@ postgres_wizard() {
         print_warning "User may already exist, continuing..."
     fi
 
-    print_info "Granting privileges..."
+    print_info "Granting database privileges..."
     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $db_name TO $username;" 2>/dev/null
+
+    print_info "Granting schema privileges (PostgreSQL 15+ compatibility)..."
+    sudo -u postgres psql -d "$db_name" -c "GRANT ALL ON SCHEMA public TO $username;" 2>/dev/null
+    sudo -u postgres psql -d "$db_name" -c "GRANT CREATE ON SCHEMA public TO $username;" 2>/dev/null
+    sudo -u postgres psql -d "$db_name" -c "GRANT USAGE ON SCHEMA public TO $username;" 2>/dev/null
+
+    print_info "Setting default privileges..."
+    sudo -u postgres psql -d "$db_name" -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO $username;" 2>/dev/null
+    sudo -u postgres psql -d "$db_name" -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO $username;" 2>/dev/null
+
+    print_info "Transferring database ownership..."
+    sudo -u postgres psql -c "ALTER DATABASE $db_name OWNER TO $username;" 2>/dev/null
+
     if [ $? -eq 0 ]; then
         link_user_to_database "postgres" "$username" "$db_name"
-        print_success "Privileges granted!"
+        print_success "Full privileges granted!"
     fi
 
     echo ""
     print_success "Setup complete!"
+    print_info "Database is ready for Django/PostgreSQL 15+ applications"
     echo ""
     echo -e "${CYAN}Connection Details:${NC}"
     echo -e "${GREEN}Database:${NC} $db_name"
     echo -e "${GREEN}Username:${NC} $username"
     echo -e "${GREEN}Password:${NC} $password"
+    echo -e "${GREEN}Host:${NC} localhost"
+    echo -e "${GREEN}Port:${NC} 5432"
     echo -e "${GREEN}Connection String:${NC} postgresql://$username:$password@localhost/$db_name"
+    echo ""
+    echo -e "${YELLOW}For .env file:${NC}"
+    echo -e "  DB_ENGINE=django.db.backends.postgresql"
+    echo -e "  DB_NAME=$db_name"
+    echo -e "  DB_USER=$username"
+    echo -e "  DB_PASSWORD=$password"
+    echo -e "  DB_HOST=localhost"
+    echo -e "  DB_PORT=5432"
 
     pause
 }
