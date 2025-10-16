@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import re
 from pathlib import Path
 from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +24,6 @@ SECRET_KEY = 'django-insecure-@8wdhz+quloymoib01w%bl_gfo%kcbi2ex7j&rvk-prbq76en)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
 
 ALLOWED_HOSTS = ["*"]
 ALLOWED_ORIGINS = ["*"]
@@ -92,12 +92,12 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'isp',
-        'USER': 'laraveluser',
-        'PASSWORD': 'secret',
-        'HOST': 'localhost',  # or your DB server IP
-        'PORT': '5432',
+        'ENGINE': config("DB_ENGINE", default="django.db.backends.postgresql"),
+        'NAME': config("DB_NAME"),
+        'USER': config("DB_USER"),
+        'PASSWORD': config("DB_PASSWORD"),
+        'HOST': config("DB_HOST"),
+        'PORT': config("DB_PORT", cast=int),
     }
 }
 
@@ -208,7 +208,7 @@ SYSTEM_API_URL = " http://192.168.10.9:5001"
 MTK_CONFIG = {
     "URL": "http://192.168.10.9:5001"
     # if DEBUG else "https://isp3.lomtechnology.com",
-           ,
+    ,
     "USERNAME": "f2net_user",
 }
 FERNET_KEY = config('FERNET_KEY')
