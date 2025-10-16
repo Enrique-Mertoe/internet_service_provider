@@ -65,6 +65,7 @@ ${YELLOW}MODES:${NC}
     ${GREEN}--all${NC}                   Run complete setup (default - includes file copy)
     ${GREEN}--update${NC}                Update deployment (copy files, rebuild, restart)
     ${GREEN}--sync${NC}                  Only sync files from source to /opt/isp_app
+    ${GREEN}--rebuild-nginx${NC}         Rebuild Nginx configuration only (no file copy)
 
 ${YELLOW}COMPONENT OPTIONS:${NC}
     ${GREEN}--help, -h${NC}              Show this help message
@@ -88,12 +89,16 @@ ${YELLOW}TYPICAL WORKFLOW:${NC}
     # Only sync files (no rebuild)
     sudo $0 --sync
 
+    # After editing Nginx config in this script
+    sudo $0 --rebuild-nginx
+
 ${YELLOW}NOTES:${NC}
     - Script can be run multiple times safely
     - ALWAYS copies files from current directory to /opt/isp_app
     - Creates dedicated app user and runs as that user
     - Uses PostgreSQL and Redis
     - --update mode: copies files, rebuilds frontend, restarts service
+    - --rebuild-nginx mode: only regenerates Nginx config from script
 
 EOF
 }
