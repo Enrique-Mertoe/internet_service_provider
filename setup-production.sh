@@ -180,6 +180,11 @@ install_system_packages() {
 
     if [[ "$OS" == *"Ubuntu"* ]] || [[ "$OS" == *"Debian"* ]]; then
         apt update
+
+        # Install Node.js 22.x from NodeSource
+        print_status "Installing Node.js 22.x..."
+        curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+
         apt install -y \
             python3 \
             python3-pip \
@@ -190,7 +195,6 @@ install_system_packages() {
             libpq-dev \
             redis-server \
             nodejs \
-            npm \
             nginx \
             git \
             curl \
