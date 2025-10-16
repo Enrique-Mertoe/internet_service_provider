@@ -151,7 +151,7 @@ DJANGO_VITE_DEV_SERVER_PORT = 5173
 DJANGO_VITE = {
     'default': {
         'dev_mode': DEBUG,
-        'dev_server_host': '192.168.10.9',
+        'dev_server_host': '192.168.1.108',
         'dev_server_port': 5173,
         'manifest_path': DJANGO_VITE_ASSETS_PATH / '.vite' / 'manifest.json',
     }
@@ -203,10 +203,10 @@ REST_FRAMEWORK = {
 }
 
 # SYSTEM_API_URL = "https://isp3.lomtechnology.com"
-SYSTEM_API_URL = " http://192.168.10.9:5001"
+SYSTEM_API_URL = " http://192.168.1.108:5001"
 
 MTK_CONFIG = {
-    "URL": "http://192.168.10.9:5001"
+    "URL": "http://192.168.1.108:5001"
     # if DEBUG else "https://isp3.lomtechnology.com",
     ,
     "USERNAME": "f2net_user",

@@ -60,7 +60,7 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     cors: {
-      origin: 'http://192.168.10.9:8000', // Django origin
+      origin: 'http://192.168.1.108:8000', // Django origin
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type'],
     }
