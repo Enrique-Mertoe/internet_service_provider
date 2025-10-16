@@ -463,7 +463,7 @@ server {
 
     # Static files
     location /static/ {
-        alias $APP_DIR/static/;
+        alias $APP_DIR/isp/static/dist/;
         expires 1y;
         add_header Cache-Control "public, immutable";
     }
