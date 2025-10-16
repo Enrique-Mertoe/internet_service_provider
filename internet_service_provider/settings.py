@@ -236,60 +236,60 @@ except (PermissionError, OSError):
     # If we can't create the logs directory, just use console logging
     use_file_logging = False
 
-# Logging configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '[{levelname}] {asctime} {name} {module} {process:d} {thread:d} - {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '[{levelname}] {asctime} - {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-        'django.server': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-    },
-}
-
-# Add file handler if logs directory is writable
-if use_file_logging:
-    LOGGING['handlers']['file'] = {
-        'class': 'logging.handlers.RotatingFileHandler',
-        'filename': str(LOGS_DIR / 'django.log'),
-        'maxBytes': 10485760,  # 10MB
-        'backupCount': 5,
-        'formatter': 'verbose',
-    }
-    # Add file handler to all loggers
-    LOGGING['root']['handlers'].append('file')
-    LOGGING['loggers']['django']['handlers'].append('file')
-    LOGGING['loggers']['django.request']['handlers'].append('file')
-    LOGGING['loggers']['django.server']['handlers'].append('file')
+# # Logging configuration
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '[{levelname}] {asctime} {name} {module} {process:d} {thread:d} - {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '[{levelname}] {asctime} - {message}',
+#             'style': '{',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console'],
+#         'level': 'INFO',
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'INFO',
+#             'propagate': False,
+#         },
+#         'django.request': {
+#             'handlers': ['console'],
+#             'level': 'ERROR',
+#             'propagate': False,
+#         },
+#         'django.server': {
+#             'handlers': ['console'],
+#             'level': 'INFO',
+#             'propagate': False,
+#         },
+#     },
+# }
+# 
+# # Add file handler if logs directory is writable
+# if use_file_logging:
+#     LOGGING['handlers']['file'] = {
+#         'class': 'logging.handlers.RotatingFileHandler',
+#         'filename': str(LOGS_DIR / 'django.log'),
+#         'maxBytes': 10485760,  # 10MB
+#         'backupCount': 5,
+#         'formatter': 'verbose',
+#     }
+#     # Add file handler to all loggers
+#     LOGGING['root']['handlers'].append('file')
+#     LOGGING['loggers']['django']['handlers'].append('file')
+#     LOGGING['loggers']['django.request']['handlers'].append('file')
+#     LOGGING['loggers']['django.server']['handlers'].append('file')
