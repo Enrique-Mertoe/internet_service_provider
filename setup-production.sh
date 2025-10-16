@@ -466,13 +466,6 @@ server {
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
 
-    # Static files
-#    location /statics/ {
-#        alias $APP_DIR/staticfiles/;
-#        expires 1y;
-#        add_header Cache-Control "public, immutable";
-#    }
-
     # Media files
     location /media/ {
         alias $APP_DIR/media/;
