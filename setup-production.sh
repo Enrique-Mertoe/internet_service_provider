@@ -452,7 +452,7 @@ fi
 
 # Build frontend
 echo "Building frontend assets..."
-npx vite build
+npm run build
 
 echo "Frontend built successfully"
 EOF
