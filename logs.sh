@@ -2,7 +2,7 @@
 
 ################################################################################
 # ISP App Log Viewer
-# Stream and view Django application logs from systemd service
+# Stream and view Django/Gunicorn application logs
 ################################################################################
 
 # Colors for output
@@ -16,6 +16,7 @@ WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
 SERVICE_NAME="isp-app"
+APP_DIR="/opt/isp_app"
 LOG_DIR="/var/log/isp_app"
 
 print_header() {
@@ -67,14 +68,23 @@ show_status() {
     echo ""
 }
 
-# Stream live logs
+# Stream live logs (Gunicorn/Django application logs)
 stream_logs() {
     print_header
-    echo -e "${MAGENTA}=== Live Logs (Press Ctrl+C to exit) ===${NC}\n"
-    print_info "Following logs for service: $SERVICE_NAME"
+    echo -e "${MAGENTA}=== Live Application Logs (Press Ctrl+C to exit) ===${NC}\n"
+    print_info "Following Gunicorn/Django application logs"
+    print_info "Shows: HTTP requests, errors, warnings, and application output"
     echo ""
 
-    sudo journalctl -u "$SERVICE_NAME" -f --no-pager
+    # Color-code different log levels
+    sudo journalctl -u "$SERVICE_NAME" -f --no-pager | sed \
+        -e "s/\(ERROR\|CRITICAL\|Exception\|Traceback\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g" \
+        -e "s/\(WARNING\|WARN\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+        -e "s/\(INFO\)/$(printf '\033[1;36m')\1$(printf '\033[0m')/g" \
+        -e "s/\(GET\|POST\|PUT\|DELETE\|PATCH\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+        -e "s/\(200\|201\|204\)/$(printf '\033[1;32m')\1$(printf '\033[0m')/g" \
+        -e "s/\(400\|401\|403\|404\)/$(printf '\033[1;33m')\1$(printf '\033[0m')/g" \
+        -e "s/\(500\|502\|503\)/$(printf '\033[1;31m')\1$(printf '\033[0m')/g"
 }
 
 # Show recent logs
