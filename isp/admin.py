@@ -178,7 +178,7 @@ class CertificationAdmin(admin.ModelAdmin):
 @admin.register(Customer)
 class CustomerAdmin(CompanyFilterMixin, admin.ModelAdmin):
     list_display = [
-        'customer_id', 'get_customer_name', 'customer_type', 'status',
+        'get_customer_name', 'customer_type', 'status',
         'primary_phone', 'city', 'current_balance', 'activation_date'
     ]
     list_filter = [
@@ -186,14 +186,14 @@ class CustomerAdmin(CompanyFilterMixin, admin.ModelAdmin):
         'activation_date', 'created_at'
     ]
     search_fields = [
-        'customer_id', 'user__first_name', 'user__last_name',
+        'user__first_name', 'user__last_name',
         'user__email', 'primary_phone', 'business_name'
     ]
-    readonly_fields = ['customer_id', 'created_at', 'updated_at']
+    readonly_fields = ['created_at', 'updated_at']
 
     fieldsets = (
         ('Basic Information', {
-            'fields': ('customer_id', 'user', 'company', 'customer_type', 'status')
+            'fields': ('user', 'company', 'customer_type', 'status')
         }),
         ('Contact Information', {
             'fields': (
@@ -204,11 +204,11 @@ class CustomerAdmin(CompanyFilterMixin, admin.ModelAdmin):
         ('Address Information', {
             'fields': (
                 'installation_address', 'billing_address',
-                'city', 'state', 'postal_code', 'country', 'coordinates'
+                'city', 'state', 'postal_code', 'country'
             )
         }),
         ('Business Information', {
-            'fields': ('business_name', 'business_registration', 'tax_id'),
+            'fields': ('business_name',),
             'classes': ('collapse',)
         }),
         ('Service Information', {
@@ -219,7 +219,7 @@ class CustomerAdmin(CompanyFilterMixin, admin.ModelAdmin):
         }),
         ('Preferences', {
             'fields': (
-                'preferred_language', 'auto_pay_enabled',
+                 'auto_pay_enabled',
                 'email_notifications', 'sms_notifications'
             ),
             'classes': ('collapse',)

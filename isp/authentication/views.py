@@ -143,7 +143,7 @@ def register_view(request):
 @csrf_exempt
 def password_reset_view(request):
     if request.method == 'GET':
-        return inertia(request, 'auth/forgot-password')
+        return render(request, 'auth/forgot-password')
 
     if request.method == 'POST':
         if request.content_type == 'application/json':
@@ -388,7 +388,6 @@ def company_setup_view(request):
         if not address:
             errors['address'] = ['Company address is required']
 
-
         if errors:
             if request.content_type == 'application/json':
                 return JsonResponse({'success': False, 'errors': errors})
@@ -419,30 +418,40 @@ def company_setup_view(request):
         while Company.objects.filter(slug=company_slug).exists():
             company_slug = f"{original_slug}-{counter}"
             counter += 1
+        try:
+            company = Company.objects.create(
+                name=company_name,
+                email=email,
+                slug=company_slug,
+                phone=phone,
+                address=address,
+                website=website or '',
+                currency=currency,
+                billing_cycle=billing_cycle,
+                is_active=True
+            )
 
-        company = Company.objects.create(
-            name=company_name,
-            email=email,
-            phone=phone,
-            address=address,
-            website=website or '',
-            currency=currency,
-            billing_cycle=billing_cycle,
-            is_active=True
-        )
+            # Associate user with the company and set as super admin
+            request.user.company = company
+            request.user.user_type = 'super_admin'
+            request.user.save()
 
-        # Associate user with the company and set as super admin
-        request.user.company = company
-        request.user.user_type = 'super_admin'
-        request.user.save()
+            if request.content_type == 'application/json':
+                return JsonResponse({
+                    'success': True,
+                    'message': 'Company setup completed successfully!',
+                    'redirect': reverse('dashboard:overview')
+                })
 
-        if request.content_type == 'application/json':
+            messages.success(request, 'Company setup completed successfully! Welcome to your ISP management dashboard.')
+            return redirect('dashboard:overview')
+        except Exception as e:
+            print(e)
             return JsonResponse({
-                'success': True,
-                'message': 'Company setup completed successfully!',
-                'redirect': reverse('dashboard:overview')
+                "errors": {
+                    "general":str(e)
+                },
+                "success": False
             })
 
-        messages.success(request, 'Company setup completed successfully! Welcome to your ISP management dashboard.')
-        return redirect('dashboard:overview')
     return JsonResponse({})

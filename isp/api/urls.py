@@ -15,6 +15,7 @@ router.register(r'packages', views.PackageViewSet, basename='package')
 router.register(r'subscriptions', views.SubscriptionViewSet, basename='subscription')
 
 router.register(r'tickets', views.TicketViewSet, basename='ticket')
+router.register(r'equipments', views.EquipmentViewSet, basename='equipment')
 router.register(r'invoices', views.InvoiceViewSet, basename='invoice')
 router.register(r'payments', views.PaymentViewSet, basename='payment')
 
@@ -50,4 +51,12 @@ urlpatterns = [
     path('export/customers/', views.ExportCustomersView.as_view(), name='export_customers'),
     path('export/usage/', views.ExportUsageView.as_view(), name='export_usage'),
     path('export/invoices/', views.ExportInvoicesView.as_view(), name='export_invoices'),
+
+    # Equipment authorization (RESTful endpoint)
+    path('equipments/auth/<str:encoded_payload>/', views.EquipmentAuthorizeView.as_view(), name='equipment_authorize'),
+    path('equipments/auth/cert/<str:auth_code>/', views.EquipmentCertView.as_view(), name='equipment_cert'),
+
+    # Equipment configuration (RESTful endpoint)
+    path('equipments/auth/config/<str:encoded_payload>/ovpn/<int:version>/', views.EquipmentConfigView.as_view(), name='equipment_config'),
+path('mikrotik/hotspot/<str:router_identity>/<str:file_name>', views.HotspotView.as_view(), name='hotspot_file')
 ]

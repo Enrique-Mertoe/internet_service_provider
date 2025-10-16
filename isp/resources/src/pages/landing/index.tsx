@@ -91,7 +91,7 @@ const HeroSection = () => {
                                                 textTransform: 'none',
                                                 fontWeight: 600
                                             }}
-                                            href={router.route("ADMIN_INDEX")}
+                                            // href={router.route("ADMIN_INDEX")}
                                         >
                                             Explore Components
                                         </Button>

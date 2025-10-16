@@ -29,6 +29,8 @@ import CreatePackage from "@/components/ui/CreatePackage";
 import {Modal} from "@/utils/shortcuts";
 import {Client, Package} from "@/types/global";
 import pkgController from "@/api/controllers/package-controller";
+import client from "@/api/controllers/client-controller";
+import { Alert, AlertTitle } from '@mui/material';
 
 
 export default function CreateClient({onClose}: any) {
@@ -43,6 +45,8 @@ export default function CreateClient({onClose}: any) {
     });
     const [loading, setISLoading] = useState(false);
     const [clientsPackages, sCP] = useState<Package[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
     const loadPackages = async () => {
         const pkgs = () => pkgController.forUser()
 
@@ -50,7 +54,7 @@ export default function CreateClient({onClose}: any) {
             pkgs().then(sCP)
             return clientsPackages.map(s => {
                 //@ts-ignore
-                 s.title = s.name + " " + s.download_speed + "/" + s.upload_speed
+                s.title = s.name + " " + s.download_speed + "/" + s.upload_speed
                 //@ts-ignore
                 s.package_type = s.package_type?.toUpperCase()
                 return s
@@ -59,17 +63,33 @@ export default function CreateClient({onClose}: any) {
         return (await pkgs()).map(s => {
             //@ts-ignore
             s.title = s.name + " " + s.download_speed + "/" + s.upload_speed;
-              //@ts-ignore
-                s.package_type = s.package_type?.toUpperCase()
+            //@ts-ignore
+            s.package_type = s.package_type?.toUpperCase()
             return s
         });
 
     }
     const handleAddClient = async () => {
-        if (!newClient.fullName || !newClient.phone || !newClient.package) {
-            alert("Full Name, Phone Number, and Package are mandatory fields.");
+        // Reset previous messages
+        setError(null);
+        setSuccess(null);
+
+        // Validate required fields
+        const validationErrors = [];
+        if (!newClient.fullName) validationErrors.push("Full Name is required");
+        if (!newClient.phone) validationErrors.push("Phone Number is required");
+        if (!newClient.package) validationErrors.push("Package is required");
+
+        // Email validation
+        if (newClient.email && !/\S+@\S+\.\S+/.test(newClient.email)) {
+            validationErrors.push("Email address is invalid");
+        }
+
+        if (validationErrors.length > 0) {
+            setError(validationErrors.join(". "));
             return;
         }
+
         setISLoading(true);
 
         const clientData = {
@@ -77,52 +97,45 @@ export default function CreateClient({onClose}: any) {
             phone: newClient.phone,
             address: newClient.address,
             email: newClient.email,
-            package: newClient.package,
-            packageId: newClient.packageId,
-            status: "action",
+            package: newClient.package, // Using package instead of packageId to match client-controller
+            status: "active",
         };
 
         try {
-            const response = await api.post({route: '/api/clients/create/', data: clientData});
-            console.log("Client added successfully:", response.data);
+            const {data, error} = await client.add(clientData);
 
-            // if (response.data.client) {
-            //     const user = response.data.client
-            //     const formattedClient = {
-            //         id: user.id,
-            //         fullName: user.full_name,
-            //         email: user.email || "",
-            //         phone: user.phone,
-            //         address: user.address || "",
-            //         package: user.package,
-            //         status: determineStatus(user),
-            //         dateJoined: user.created_at,
-            //         lastPayment: user.package_start || user.created_at,
-            //         avatar: "/api/placeholder/40/40",
-            //         dueAmount: calculateDueAmount(user),
-            //         router_username: user.router_username,
-            //         router_password: user.router_password,
-            //         created_at: user.created_at,
-            //         due: user.due,
-            //         package_start: user.package_start
-            //     };
-            //     // setClients(formattedClient);
-            //     setClients((prev) => [formattedClient, ...prev]);
-            // }
-            //
-            // setShowAddModal(false);
-            // setNewClient({
-            //     fullName: "",
-            //     email: "",
-            //     phone: "",
-            //     address: "",
-            //     package: "",
-            //     status: "active",
-            //     packageId: null,
-            // });
+            if (error) {
+                console.error("Failed to add client:", error);
+
+                // Display error message with proper formatting
+                const errorMessage = error.message || "Failed to add client. Please try again.";
+                setError(errorMessage.replace(/\n/g, ". "));
+                return;
+            }
+
+            if (data) {
+                console.log("Client added successfully:", data);
+                setSuccess("Client added successfully!");
+
+                // Reset form after successful submission
+                setNewClient({
+                    fullName: "",
+                    email: "",
+                    phone: "",
+                    address: "",
+                    package: "",
+                    status: "active",
+                    packageId: null,
+                });
+
+                // Close modal after a short delay to show success message
+                setTimeout(() => {
+                    onClose();
+                }, 2000);
+            }
         } catch (error) {
             console.error("Failed to add client:", error);
-            alert("Failed to add client. Please try again.");
+            setError("An unexpected error occurred. Please try again.");
         } finally {
             setISLoading(false);
         }
@@ -133,6 +146,26 @@ export default function CreateClient({onClose}: any) {
                 Add New Client
             </DialogTitle>
             <DialogContent>
+                {error && (
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                        <AlertTitle>Error</AlertTitle>
+                        {error.includes(". ") ? (
+                            <ul style={{ margin: 0, paddingLeft: '1rem' }}>
+                                {error.split(". ").filter(Boolean).map((err, index) => (
+                                    <li key={index}>{err}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            error
+                        )}
+                    </Alert>
+                )}
+                {success && (
+                    <Alert severity="success" sx={{ mb: 2 }}>
+                        <AlertTitle>Success</AlertTitle>
+                        {success}
+                    </Alert>
+                )}
                 <Box component="form" sx={{mt: 2}}>
                     <Grid container spacing={2}>
                         <Grid size={"grow"}>
@@ -184,19 +217,14 @@ export default function CreateClient({onClose}: any) {
                                 <div className="flex-1">
                                     <AsyncSelect
                                         label="Package"
-                                        onChange={(e: any) => {
-                                            const selectedPackage = clientsPackages.find(
-                                                (pkg) => `${pkg.name} ${pkg.speed} ${pkg.duration}` === e.target.value
-                                            );
+                                        onChange={(e: any, val: any) => {
                                             setNewClient({
                                                 ...newClient,
-                                                package: e.target.value,
-                                                packageId: selectedPackage?.id || null,
+                                                package: val?.id,
                                             });
                                         }}
                                         fn={loadPackages}
-
-                                        groupBy={(option:any) => option.package_type}
+                                        groupBy={(option: any) => option.package_type}
                                     />
                                 </div>
                                 <Tooltip title="Click to add new package">

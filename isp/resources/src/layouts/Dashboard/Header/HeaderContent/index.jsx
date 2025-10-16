@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import Search from './Search';
 import Profile from './Profile';
 import Notification from './Notification';
+import {Button} from "@mui/material";
+import Message from "@/layouts/Dashboard/Header/HeaderContent/Messages.jsx";
 // import MobileSection from './MobileSection';
 
 // project import
@@ -15,27 +17,35 @@ import Notification from './Notification';
 // ==============================|| HEADER - CONTENT ||============================== //
 
 export default function HeaderContent() {
-  const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+    const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
-  return (
-    <>
-      {!downLG && <Search />}
-      {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
-      {/*<IconButton*/}
-      {/*  component={Link}*/}
-      {/*  href="https://github.com/codedthemes/mantis-free-react-admin-template"*/}
-      {/*  target="_blank"*/}
-      {/*  disableRipple*/}
-      {/*  color="secondary"*/}
-      {/*  title="Download Free Version"*/}
-      {/*  sx={{ color: 'text.primary', bgcolor: 'grey.100' }}*/}
-      {/*>*/}
-      {/*  <Github/>*/}
-      {/*</IconButton>*/}
+    return (
+        <>
 
-      <Notification />
-      {!downLG && <Profile />}
-      {/*{downLG && <MobileSection />}*/}
-    </>
-  );
+            {downLG && <Box sx={{width: '100%', ml: 1}}/>}
+            <div className="w-full"></div>
+            <div className="flex gap-2 justify-center items-center ">
+                <Button variant="outlined"
+                        sx={{
+                            borderRadius: 10,
+                        }}
+                >Clients</Button>
+                <Button variant="outlined"
+                        sx={{
+                            borderRadius: 10,
+                        }}
+                >Devices</Button>
+                <Button variant="outlined"
+                        sx={{
+                            borderRadius: 10,
+                        }}
+                >Packages</Button>
+            </div>
+            {!downLG && <Search/>}
+            <Notification/>
+            <Message/>
+            {!downLG && <Profile/>}
+            {/*{downLG && <MobileSection />}*/}
+        </>
+    );
 }

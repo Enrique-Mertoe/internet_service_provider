@@ -7,7 +7,7 @@ import {
     Typography,
     Paper,
     useTheme,
-    useMediaQuery,
+    useMediaQuery, Link,
 } from '@mui/material';
 import {
     RouterOutlined,
@@ -22,7 +22,8 @@ import {styled, keyframes} from '@mui/material/styles';
 // Option 1: Import from assets (bundled by Vite)
 import brandImage from "@/public/images/auth-image.png"
 import {url} from "@/lib/utils";
-
+import AppLogoIcon from "@/components/app-logo-icon";
+import LogoSection from "@/components/logo"
 // Option 2: Use public directory path (served directly)
 // const brandImage = "/static/images/auth-image.png"
 const brandImagePublic = "/static/images/auth-image.png"
@@ -116,24 +117,42 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                 backgroundColor: 'grey.50',
                 display: 'flex',
                 alignItems: 'center',
-                py: 3,
             }}
         >
-            <Container maxWidth="lg">
-                <div className={"grid md:grid-cols-2"}>
+            <Container className="absolute flex justify-between items-center py-2 top-0 inset-x-0 container">
+                <div className="flex gap-2 items-center">
+                    <LogoSection/>
+                    <Typography
+                        variant="h5"
+                        sx={{opacity: 0.85, color: theme.palette.common.black}}
+                    >
+                        Mantix
+                    </Typography>
+                </div>
+                <Link href={""} className="flex items-center justify-center">Need help?</Link>
+            </Container>
+
+            <Container sx={{
+                margin: 0,
+                padding: 0,
+            }} maxWidth="lg">
+                <div className={"grid md:grid-cols-12"}>
                     {/* Left Side - Illustration */}
                     {!isMobile && (
                         <Grid
                             container
+                            className={"md:col-span-5 pt-20"}
                             size={{
                                 xs: 12,
                                 md: 6
                             }}
                             sx={{
+                                height: '100vh',
                                 display: 'flex',
+                                overflow: 'hidden',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                p: 4,
+                                px: 4,
                             }}
                         >
                             <Box
@@ -223,9 +242,10 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
 
                     {/* Right Side - Form */}
                     <Grid
+                        className={"md:col-span-7"}
                         container
                         size={{
-                            xs:12,md:6
+                            xs: 12, md: 6
                         }}
                         sx={{
                             display: 'flex',
@@ -234,16 +254,18 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
                             p: 4,
                         }}
                     >
-                        <Paper
-                            elevation={0}
-                            sx={{
-                                p: 4,
-                                width: '100%',
-                                borderRadius: 2,
-                            }}
-                        >
-                            {children}
-                        </Paper>
+                        <div className="flex justify-center w-full">
+                            <Paper
+                                elevation={1}
+                                className={"min-w-[450px]"}
+                                sx={{
+                                    p: 4,
+                                    borderRadius: 2,
+                                }}
+                            >
+                                {children}
+                            </Paper>
+                        </div>
                     </Grid>
                 </div>
             </Container>

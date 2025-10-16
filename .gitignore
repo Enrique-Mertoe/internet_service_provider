@@ -1,5 +1,24 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/staticfiles/
+/media/
+
 # dependencies
 /node_modules
 /.pnp
@@ -19,6 +38,12 @@
 
 # production
 /build
+/isp/static/dist/
+/isp/static/dist/*
+
+# Keep the manifest file but ignore the built assets
+!isp/static/dist/.vite/
+!isp/static/dist/.vite/manifest.json
 
 # misc
 .DS_Store
@@ -31,7 +56,12 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
 
 # vercel
 .vercel
@@ -40,4 +70,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# database
 .db*
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+/isp/static/
+/staticfiles/

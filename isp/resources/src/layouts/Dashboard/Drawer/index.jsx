@@ -28,11 +28,16 @@ export default function MainDrawer({window}) {
     const drawerHeader = useMemo(() => <DrawerHeader open={drawerOpen}/>, [drawerOpen]);
 
     return (
-        <Box component="nav" sx={{flexShrink: {md: 0}, zIndex: 1200}} aria-label="mailbox folders">
+        <Box component="nav" className={""} sx={{flexShrink: {md: 0}, zIndex: 1200}} aria-label="mailbox folders">
             {!downLG ? (
-                <MiniDrawerStyled className={"flex group flex-col"} variant="permanent" open={drawerOpen}>
+                <MiniDrawerStyled sx={{
+                    '& .MuiDrawer-paper': {
+                       backgroundColor: 'transparent',
+                        boxShadow:"none",border:"0"
+                    },
+                }} className={"flex   group flex-col"} variant="permanent" open={true}>
                     {drawerHeader}
-                    <div className="flex-grow group-hover:overflow-y-auto scrollbar-thin overflow-hidden">
+                    <div className="flex-grow  group-hovder:overflow-y-auto scrollbar-thin overflow-hidden">
                         {drawerContent}
                     </div>
                 </MiniDrawerStyled>

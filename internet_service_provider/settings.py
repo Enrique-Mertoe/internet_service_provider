@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import re
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,9 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@8wdhz+quloymoib01w%bl_gfo%kcbi2ex7j&rvk-prbq76en)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+
 
 ALLOWED_HOSTS = ["*"]
+ALLOWED_ORIGINS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -40,11 +43,14 @@ INSTALLED_APPS = [
     'django_vite',
     'routes',
     'django_extensions',
-    'django_js_reverse'
+    'mtk',
+    'django_ratelimit',
+    'corsheaders'
 
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -145,7 +151,7 @@ DJANGO_VITE_DEV_SERVER_PORT = 5173
 DJANGO_VITE = {
     'default': {
         'dev_mode': DEBUG,
-        'dev_server_host': 'localhost',
+        'dev_server_host': '192.168.10.9',
         'dev_server_port': 5173,
         'manifest_path': DJANGO_VITE_ASSETS_PATH / '.vite' / 'manifest.json',
     }
@@ -157,7 +163,8 @@ INERTIA_LAYOUT = BASE_DIR / "isp" / "templates/app.main.html"
 STATICFILES_DIRS = [
     DJANGO_VITE_ASSETS_PATH,
     BASE_DIR / 'isp/static/dist',
-    BASE_DIR / 'isp/resources/src/public',
+    BASE_DIR / 'isp/resources/src',
+    # BASE_DIR / "staticfiles"
 ]
 
 
@@ -175,16 +182,6 @@ ROUTE_GENERATOR = {
     'ADMIN_ROUTES': False,
     'AUTO_GENERATE': True,  # Enable auto-generation in development
 }
-
-# Exclude admin routes (like your custom setting)
-JS_REVERSE_EXCLUDE_NAMESPACES = ['admin', 'djdt']
-
-# Optional: Include only specific namespaces
-# JS_REVERSE_INCLUDE_ONLY_NAMESPACES = ['api', 'customer']
-
-# For static file generation (similar to your approach)
-JS_REVERSE_OUTPUT_PATH = BASE_DIR / 'isp/resources/src/utils'
-
 AUTH_USER_MODEL = 'isp.User'
 
 # Security
@@ -204,3 +201,27 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20
 }
+
+# SYSTEM_API_URL = "https://isp3.lomtechnology.com"
+SYSTEM_API_URL = " http://192.168.10.9:5001"
+
+MTK_CONFIG = {
+    "URL": "http://192.168.10.9:5001"
+    # if DEBUG else "https://isp3.lomtechnology.com",
+           ,
+    "USERNAME": "f2net_user",
+}
+FERNET_KEY = config('FERNET_KEY')
+RSC_FILE = config("RSC_FILE", default="f2net.rsc")
+
+# Configure cache (required for rate limiting)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+    }
+}
+
+ISP_NAME = "F2Net ISP"
+SUPPORT_PHONE = "+254714356761"
+SUPPORT_EMAIL = "support@lomtechnology.com"

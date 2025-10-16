@@ -42,14 +42,6 @@ export default function AsyncSelect({onChange, sx, groupBy, label, fn}: any) {
         setOpen(false);
         setOptions([]);
     };
-    // const optionsl = options.map((option) => {
-    //     const firstLetter = option.title[0].toUpperCase();
-    //     return {
-    //         firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-    //         ...option,
-    //     };
-    // });
-
     return (
         <Autocomplete
             sx={sx}

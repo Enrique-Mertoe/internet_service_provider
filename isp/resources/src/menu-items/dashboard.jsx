@@ -22,20 +22,20 @@ const dashboard = {
             icon: icons.DashboardOutlined,
             breadcrumbs: false
         },
-        {
-            id: 'clients',
-            title: 'Clients',
-            url: '/dashboard/clients/',
-            type: 'item',
-            icon: UserOutlined
-        },
-        {
-            id: 'packages',
-            title: 'Internet Packages',
-            type: 'item',
-            url: '/dashboard/packages/',
-            icon: AppstoreOutlined
-        },
+        // {
+        //     id: 'clients',
+        //     title: 'Clients',
+        //     url: '/dashboard/clients/',
+        //     type: 'item',
+        //     icon: UserOutlined
+        // },
+        // {
+        //     id: 'packages',
+        //     title: 'Internet Packages',
+        //     type: 'item',
+        //     url: '/dashboard/packages/',
+        //     icon: AppstoreOutlined
+        // },
     ]
 };
 

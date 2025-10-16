@@ -18,6 +18,10 @@ urlpatterns = [
     path('analytics/', views.dashboard_analytics, name='analytics'),
 
     # =============================================================================
+    # DEVICE MANAGEMENT
+    # =============================================================================
+    path('network/equipments/', views.equipments, name='equipments.index'),
+    # =============================================================================
     # CUSTOMER MANAGEMENT
     # =============================================================================
     path('clients/', views.customers_list, name='customers.index'),

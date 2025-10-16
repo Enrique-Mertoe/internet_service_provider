@@ -17,34 +17,62 @@ import {
     MenuItem,
     Select,
     TextField,
-    Typography
+    Typography,
+    Card,
+    CardContent,
+    Chip,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    InputAdornment,
+    Drawer,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Divider,
+    Avatar,
+    Stack,
+    Tooltip,
+    Fab,
+    useTheme,
+    alpha
 } from '@mui/material'
 
+import {
+    Search,
+    FilterList,
+    GridView,
+    ViewList,
+    PersonAdd,
+    Close,
+    Visibility,
+    VisibilityOff,
+    Delete,
+    Edit,
+    CreditCard,
+    Router,
+    CalendarToday,
+    Person,
+    Key,
+    Schedule,
+    Warning,
+    CheckCircle,
+    Error,
+    HourglassEmpty
+} from '@mui/icons-material';
 
 import React, {useEffect, useState} from "react";
 import {api} from "@/utils/api";
 import AsyncSelect from "@/components/@extended/AsyncSelect";
-import {Add} from "@mui/icons-material";
-import Tooltip from '@mui/material/Tooltip';
 import CreatePackage from "@/components/ui/CreatePackage";
 import {Modal} from "@/utils/shortcuts";
 import CreateClient from "@/components/ui/CreateClient";
-// import {useNavigate} from "react-router-dom";
-// import {useApp} from "../ui/AppContext.tsx";
-
-// interface Client {
-//     id: number;
-//     fullName: string;
-//     email: string;
-//     phone: string;
-//     address: string;
-//     package: string;
-//     status: string;
-//     dateJoined: string;
-//     lastPayment: string;
-//     avatar: string;
-//     dueAmount: number;
-// }
+import client from "@/api/controllers/client-controller";
 
 type SortType = "newest" | "oldest" | "name";
 
@@ -64,17 +92,6 @@ interface Package {
     name: string;
     speed: string;
     duration: string;
-
-}
-
-interface NewClient {
-    fullName: string;
-    email: string;
-    phone: string;
-    address: string;
-    package: string;
-    packageId: number | null;
-    status: string;
 }
 
 interface Client {
@@ -104,24 +121,17 @@ interface Client {
 }
 
 function ClientsPage() {
-    // const navigate = useNavigate();
-    // const {usersCount} = useApp();
+    const theme = useTheme();
     const [sort, setSort] = useState("newest");
     const [clients, setClients] = useState<Client[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
-    const [showAddModal, setShowAddModal] = useState(false);
     const [showFilterDrawer, setShowFilterDrawer] = useState(false);
     const [view, setView] = useState("grid");
-    const [clientsPackages, setClientsPackages] = useState<Package[]>([]);
-    const [_isLoadingSubmit, setIsLoadingSubmit] = useState(false);
-    // const [page, setPage] = useState(1);
-    // const [hasMore, setHasMore] = useState(true);
     const [passwordVisibility, setPasswordVisibility] = useState<{ [key: number]: boolean }>({});
     const [isDeletingClient, setIsDeletingClient] = useState<number | null>(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [clientToDelete, setClientToDelete] = useState<{ id: number, phone: string } | null>(null);
-
 
     const [filters, setFilters] = useState({
         status: "all",
@@ -129,29 +139,18 @@ function ClientsPage() {
         dateJoined: "all"
     });
 
-
-    // const loadMoreClients = () => {
-    //     if (!hasMore || isLoading) return;
-
-    //     setPage(prevPage => prevPage + 1);
-    //     // Implementation would fetch the next page of clients
-    //     // For now we're simulating with the mock data
-    // };
-
-
     const togglePasswordVisibility = (clientId: number) => {
         setPasswordVisibility(prev => ({
             ...prev,
             [clientId]: !prev[clientId]
         }));
     };
+
     const handleDeleteClient = (client: { id: number, phone: string }) => {
         setClientToDelete(client);
         setShowDeleteConfirm(true);
     };
 
-
-    // 6. Add this function to confirm deletion
     const confirmDeleteClient = async () => {
         if (!clientToDelete) return;
 
@@ -161,12 +160,10 @@ function ClientsPage() {
                 route: '/api/clients/delete/',
                 data: {
                     id: clientToDelete.id,
-                    username:
-                        clients.find(c => c.id === clientToDelete.id)?.router_username || ""
+                    username: clients.find(c => c.id === clientToDelete.id)?.router_username || ""
                 }
             });
 
-            // Remove client from state
             setClients(prev => prev.filter(c => c.id !== clientToDelete.id));
             setShowDeleteConfirm(false);
         } catch (error) {
@@ -177,38 +174,28 @@ function ClientsPage() {
         }
     };
 
-
     useEffect(() => {
         const fetchClients = async () => {
             setIsLoading(true);
             try {
-                const res = await api.get({
-                    route: "API_CUSTOMER_LIST",
-                    params: {format: "json"},
-                    // params: filters.status === "all" ? {
-                    //     load_type: "all"
-                    // } : {
-                    //     load_type: "active",
-                    //     status: filters.status
-                    // }
-                });
-                const formattedClients = res.data.users.map((user: any) => ({
+                const res = await client.forUser();
+                const formattedClients = res.map((user: any) => ({
                     id: user.id,
                     fullName: user.full_name,
-                    email: user.email || "",
-                    phone: user.phone,
+                    email: user.primary_email || "",
+                    phone: user.primary_phone || "",
                     address: user.address || "",
-                    package: user.package,
                     status: determineStatus(user),
                     dateJoined: user.created_at,
                     lastPayment: user.package_start || user.created_at,
                     avatar: "/api/placeholder/40/40",
                     dueAmount: calculateDueAmount(user),
-                    router_username: user.router_username,
-                    router_password: user.router_password,
                     created_at: user.created_at,
                     due: user.due,
-                    package_start: user.package_start
+                    package_start: user.package_start,
+                    router_username: user.router_username,
+                    router_password: user.router_password,
+                    package: user.package
                 }));
                 setClients(formattedClients);
             } catch (error) {
@@ -220,7 +207,6 @@ function ClientsPage() {
 
         fetchClients();
     }, []);
-
 
     const determineStatus = (user: any) => {
         const dueDate = new Date(user.due);
@@ -236,7 +222,6 @@ function ClientsPage() {
         return "active";
     };
 
-
     const calculateDueAmount = (user: any) => {
         if (determineStatus(user) === "overdue") {
             return parseFloat(user.package?.price || "0");
@@ -244,41 +229,53 @@ function ClientsPage() {
         return 0;
     };
 
+    const getStatusChip = (status: string) => {
+        const statusConfig = {
+            active: {
+                color: 'success' as const,
+                icon: <CheckCircle sx={{ fontSize: 14 }} />,
+                label: 'Active'
+            },
+            inactive: {
+                color: 'default' as const,
+                icon: <HourglassEmpty sx={{ fontSize: 14 }} />,
+                label: 'Inactive'
+            },
+            overdue: {
+                color: 'error' as const,
+                icon: <Error sx={{ fontSize: 14 }} />,
+                label: 'Payment Overdue'
+            },
+            warning: {
+                color: 'warning' as const,
+                icon: <Warning sx={{ fontSize: 14 }} />,
+                label: 'Payment Due Soon'
+            }
+        };
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case "active":
-                return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-            case "inactive":
-                return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
-            case "overdue":
-                return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
-            case "warning":
-                return "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200";
-            default:
-                return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
-        }
+        const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
+
+        return (
+            <Chip
+                icon={config.icon}
+                label={config.label}
+                color={config.color}
+                size="small"
+                variant="filled"
+                sx={{
+                    fontWeight: 600,
+                    minWidth: 120,
+                    '& .MuiChip-icon': {
+                        fontSize: 14
+                    }
+                }}
+            />
+        );
     };
-
-    const getStatusText = (status: string) => {
-        switch (status) {
-            case "active":
-                return "Active";
-            case "inactive":
-                return "Inactive";
-            case "overdue":
-                return "Payment Overdue";
-            case "warning":
-                return "Payment Due Soon";
-            default:
-                return status;
-        }
-    };
-
 
     const filteredClients = clients.filter((client) => {
         const matchesSearch =
-            client.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            client.fullName?.toLowerCase()?.includes(searchTerm.toLowerCase()) ||
             client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
             client.phone.includes(searchTerm);
 
@@ -289,218 +286,306 @@ function ClientsPage() {
     });
 
     const sortedClients = [...filteredClients].sort((a, b) => compareClients(sort as SortType, a, b));
-
     const uniquePackages = [...new Set(clients.map((c) => c.package?.name))].filter(Boolean);
 
     const renderGridView = () => (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300">
+        <Grid container spacing={2}>
             {sortedClients.map((client) => (
-                <div
-                    key={client.id}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-all duration-300 animate-fadeIn"
-                >
-                    <div className="flex items-center space-x-4 mb-4">
-                        {/* <img
-                            src={client.avatar}
-                            alt={client.fullName}
-                            className="rounded-full h-12 w-12 object-cover"
-                        /> */}
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{client.fullName}</h3>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">{client.phone}</div>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2 text-sm">
-                        <div className="flex items-center text-gray-700 dark:text-gray-300">
-                            <i className="bi bi-router mr-2"></i>
-                            <span>{client.package?.name} - {client.package?.speed}</span>
-                        </div>
-                        <div className="flex items-center text-gray-700 dark:text-gray-300">
-                            <i className="bi bi-calendar-event mr-2"></i>
-                            <span>{client.package?.duration}</span>
-                        </div>
-                        <div className="flex items-center text-gray-700 dark:text-gray-300">
-                            <i className="bi bi-person-badge mr-2"></i>
-                            <span>{client.router_username}</span>
-                        </div>
-                        <div className="flex items-center justify-between text-gray-700 dark:text-gray-300">
-                            <div className="flex items-center">
-                                <i className="bi bi-key mr-2"></i>
-                                <span>{passwordVisibility[client.id] ? client.router_password : '••••••••'}</span>
-                            </div>
-                            <button
-                                onClick={() => togglePasswordVisibility(client.id)}
-                                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                            >
-                                <i className={`bi ${passwordVisibility[client.id] ? 'bi-eye-slash' : 'bi-eye'}`}></i>
-                            </button>
-                        </div>
-                        <div className="flex items-center text-gray-700 dark:text-gray-300">
-                            <i className="bi bi-calendar-check mr-2"></i>
-                            <span>Expires: {new Date(client.due).toLocaleDateString()}</span>
-                        </div>
-                    </div>
-
-                    <div className="mt-4 flex justify-between items-center">
-                        <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(client.status)}`}
-                        >
-                            {getStatusText(client.status)}
-                        </span>
-
-                        <div className="flex space-x-2">
-                            {client.dueAmount > 0 && (
-                                <span className="text-red-600 dark:text-red-400 font-medium">
-                                    ${client.dueAmount} due
-                                </span>
-                            )}
-                            <button
-                                onClick={() => handleDeleteClient({id: client.id, phone: client.phone})}
-                                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                                disabled={isDeletingClient === client.id}
-                            >
-                                {isDeletingClient === client.id ? (
-                                    <i className="bi bi-hourglass-split animate-spin"></i>
-                                ) : (
-                                    <i className="bi bi-trash"></i>
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            ))}
-        </div>
-    );
-
-    // 10. Update the list view JSX with the new fields
-    const renderListView = () => (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-50 dark:bg-gray-700">
-                <tr>
-                    <th scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                        Client
-                    </th>
-                    <th scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300 hidden md:table-cell">
-                        Package
-                    </th>
-                    <th scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300 hidden lg:table-cell">
-                        Credentials
-                    </th>
-                    <th scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                        Status
-                    </th>
-                    <th scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
-                        Actions
-                    </th>
-                </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                {sortedClients.map((client) => (
-                    <tr key={client.id}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 animate-fadeIn">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                                {/* <div className="flex-shrink-0 h-10 w-10">
-                                    <img className="h-10 w-10 rounded-full" src={client.avatar} alt=""/>
-                                </div> */}
-                                <div className="ml-4">
-                                    <div
-                                        className="text-sm font-medium text-gray-900 dark:text-white">{client.fullName}</div>
-                                    <div
-                                        className="text-sm text-gray-500 dark:text-gray-400">Phone: {client.phone}</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
-                            <div className="text-sm text-gray-900 dark:text-white">Package: {client.package?.name}</div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                                Pkg Duration: {client.package?.speed} - {client.package?.duration}
-                            </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap hidden lg:table-cell">
-                            <div className="text-sm text-gray-900 dark:text-white">
-                                User: {client.router_username}
-                            </div>
-                            <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                                <span>Pass: {passwordVisibility[client.id] ? client.router_password : '••••••••'}</span>
-                                <button
-                                    onClick={() => togglePasswordVisibility(client.id)}
-                                    className="ml-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                <Grid item xs={12} sm={6} md={4} lg={3} key={client.id}>
+                    <Card
+                        elevation={2}
+                        sx={{
+                            height: '100%',
+                            position: 'relative',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                elevation: 8,
+                                transform: 'translateY(-2px)',
+                                boxShadow: `0 8px 25px ${alpha(theme.palette.primary.main, 0.15)}`
+                            },
+                            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                            background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.primary.main, 0.02)} 100%)`
+                        }}
+                    >
+                        <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                <Avatar
+                                    sx={{
+                                        width: 40,
+                                        height: 40,
+                                        mr: 2,
+                                        bgcolor: 'primary.main',
+                                        color: 'white',
+                                        fontWeight: 600
+                                    }}
                                 >
-                                    <i className={`bi ${passwordVisibility[client.id] ? 'bi-eye-slash' : 'bi-eye'}`}></i>
-                                </button>
-                            </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                            <span
-                                className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(client.status)}`}>
-                                {getStatusText(client.status)}
-                            </span>
-                            {client.dueAmount > 0 && (
-                                <div
-                                    className="text-sm text-red-600 dark:text-red-400 mt-1">${client.dueAmount} due</div>
-                            )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                            <button
-                                className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-3">
-                                <i className="bi bi-pencil"></i>
-                            </button>
-                            <button
-                                className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
-                                <i className="bi bi-credit-card-2-front"></i>
-                            </button>
-                            <button
-                                onClick={() => handleDeleteClient({id: client.id, phone: client.phone})}
-                                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                                disabled={isDeletingClient === client.id}
-                            >
-                                {isDeletingClient === client.id ? (
-                                    <i className="bi bi-hourglass-split animate-spin"></i>
-                                ) : (
-                                    <i className="bi bi-trash"></i>
-                                )}
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-        </div>
+                                    {client.fullName.charAt(0).toUpperCase()}
+                                </Avatar>
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            fontWeight: 600,
+                                            fontSize: '0.95rem',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }}
+                                    >
+                                        {client.fullName}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{ fontSize: '0.8rem' }}
+                                    >
+                                        {client.phone}
+                                    </Typography>
+                                </Box>
+                            </Box>
+
+                            <Stack spacing={1.5} sx={{ mb: 2 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Router sx={{ fontSize: 16, mr: 1, color: 'primary.main' }} />
+                                    <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
+                                        {client.package?.name} - {client.package?.speed}
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Schedule sx={{ fontSize: 16, mr: 1, color: 'primary.main' }} />
+                                    <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
+                                        {client.package?.duration}
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Person sx={{ fontSize: 16, mr: 1, color: 'primary.main' }} />
+                                    <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
+                                        {client.router_username}
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                                        <Key sx={{ fontSize: 16, mr: 1, color: 'primary.main' }} />
+                                        <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
+                                            {passwordVisibility[client.id] ? client.router_password : '••••••••'}
+                                        </Typography>
+                                    </Box>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => togglePasswordVisibility(client.id)}
+                                        sx={{ ml: 1 }}
+                                    >
+                                        {passwordVisibility[client.id] ?
+                                            <VisibilityOff sx={{ fontSize: 16 }} /> :
+                                            <Visibility sx={{ fontSize: 16 }} />
+                                        }
+                                    </IconButton>
+                                </Box>
+
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <CalendarToday sx={{ fontSize: 16, mr: 1, color: 'primary.main' }} />
+                                    <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
+                                        Expires: {new Date(client.due).toLocaleDateString()}
+                                    </Typography>
+                                </Box>
+                            </Stack>
+
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                                {getStatusChip(client.status)}
+
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    {client.dueAmount > 0 && (
+                                        <Typography variant="body2" color="error" sx={{ fontWeight: 600, fontSize: '0.8rem' }}>
+                                            ${client.dueAmount} due
+                                        </Typography>
+                                    )}
+                                    <IconButton
+                                        size="small"
+                                        color="error"
+                                        onClick={() => handleDeleteClient({id: client.id, phone: client.phone})}
+                                        disabled={isDeletingClient === client.id}
+                                    >
+                                        {isDeletingClient === client.id ?
+                                            <CircularProgress size={16} /> :
+                                            <Delete sx={{ fontSize: 16 }} />
+                                        }
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            ))}
+        </Grid>
     );
 
-    // Delete Confirmation Modal - MUI Version
+    const renderListView = () => (
+        <TableContainer
+            component={Paper}
+            elevation={2}
+            sx={{
+                border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                borderRadius: 2,
+                overflow: 'hidden'
+            }}
+        >
+            <Table size="small">
+                <TableHead>
+                    <TableRow sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}>
+                        <TableCell sx={{ fontWeight: 600, color: 'primary.main' }}>Client</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: 'primary.main', display: { xs: 'none', md: 'table-cell' } }}>Package</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: 'primary.main', display: { xs: 'none', lg: 'table-cell' } }}>Credentials</TableCell>
+                        <TableCell sx={{ fontWeight: 600, color: 'primary.main' }}>Status</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 600, color: 'primary.main' }}>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {sortedClients.map((client) => (
+                        <TableRow
+                            key={client.id}
+                            hover
+                            sx={{
+                                '&:hover': {
+                                    bgcolor: alpha(theme.palette.primary.main, 0.02)
+                                },
+                                transition: 'background-color 0.2s ease'
+                            }}
+                        >
+                            <TableCell>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Avatar
+                                        sx={{
+                                            width: 32,
+                                            height: 32,
+                                            mr: 2,
+                                            bgcolor: 'primary.main',
+                                            fontSize: '0.875rem',
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        {client.fullName.charAt(0).toUpperCase()}
+                                    </Avatar>
+                                    <Box>
+                                        <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
+                                            {client.fullName}
+                                        </Typography>
+                                        <Typography variant="caption" color="text.secondary">
+                                            {client.phone}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </TableCell>
+
+                            <TableCell sx={{ display: { xs: 'none', md: 'table-cell' } }}>
+                                <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '0.875rem' }}>
+                                    {client.package?.name}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    {client.package?.speed} - {client.package?.duration}
+                                </Typography>
+                            </TableCell>
+
+                            <TableCell sx={{ display: { xs: 'none', lg: 'table-cell' } }}>
+                                <Typography variant="body2" sx={{ fontSize: '0.875rem' }}>
+                                    User: {client.router_username}
+                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography variant="caption" color="text.secondary">
+                                        Pass: {passwordVisibility[client.id] ? client.router_password : '••••••••'}
+                                    </Typography>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => togglePasswordVisibility(client.id)}
+                                        sx={{ ml: 1 }}
+                                    >
+                                        {passwordVisibility[client.id] ?
+                                            <VisibilityOff sx={{ fontSize: 14 }} /> :
+                                            <Visibility sx={{ fontSize: 14 }} />
+                                        }
+                                    </IconButton>
+                                </Box>
+                            </TableCell>
+
+                            <TableCell>
+                                {getStatusChip(client.status)}
+                                {client.dueAmount > 0 && (
+                                    <Typography variant="caption" color="error" display="block" sx={{ mt: 0.5, fontWeight: 600 }}>
+                                        ${client.dueAmount} due
+                                    </Typography>
+                                )}
+                            </TableCell>
+
+                            <TableCell align="right">
+                                <Stack direction="row" spacing={1} justifyContent="flex-end">
+                                    <Tooltip title="Edit">
+                                        <IconButton size="small" color="primary">
+                                            <Edit sx={{ fontSize: 16 }} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Payment">
+                                        <IconButton size="small" color="info">
+                                            <CreditCard sx={{ fontSize: 16 }} />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete">
+                                        <IconButton
+                                            size="small"
+                                            color="error"
+                                            onClick={() => handleDeleteClient({id: client.id, phone: client.phone})}
+                                            disabled={isDeletingClient === client.id}
+                                        >
+                                            {isDeletingClient === client.id ?
+                                                <CircularProgress size={16} /> :
+                                                <Delete sx={{ fontSize: 16 }} />
+                                            }
+                                        </IconButton>
+                                    </Tooltip>
+                                </Stack>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+
     const renderDeleteConfirmModal = () => (
         <Dialog
-            // open={showDeleteConfirm && !!clientToDelete}
+            open={showDeleteConfirm && !!clientToDelete}
             onClose={() => setShowDeleteConfirm(false)}
             maxWidth="sm"
             fullWidth
+            PaperProps={{
+                sx: {
+                    borderRadius: 3,
+                    border: `1px solid ${alpha(theme.palette.error.main, 0.2)}`
+                }
+            }}
         >
-            <DialogTitle sx={{color: 'error.main', fontWeight: 600}}>
-                Delete Client
+            <DialogTitle sx={{ color: 'error.main', fontWeight: 600, pb: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Error sx={{ mr: 1 }} />
+                    Delete Client
+                </Box>
             </DialogTitle>
             <DialogContent>
-                <Typography variant="body1" sx={{mt: 1}}>
+                <Typography variant="body1" sx={{ mt: 1 }}>
                     Are you sure you want to delete{' '}
-                    <Typography component="span" sx={{fontWeight: 600}}>
+                    <Typography component="span" sx={{ fontWeight: 600, color: 'primary.main' }}>
                         {clientToDelete?.phone}
                     </Typography>
                     ? This action cannot be undone.
                 </Typography>
             </DialogContent>
-            <DialogActions sx={{px: 3, pb: 3}}>
+            <DialogActions sx={{ px: 3, pb: 3, gap: 2 }}>
                 <Button
                     onClick={() => setShowDeleteConfirm(false)}
                     variant="outlined"
                     disabled={isDeletingClient === clientToDelete?.id}
+                    sx={{ minWidth: 100 }}
                 >
                     Cancel
                 </Button>
@@ -509,11 +594,11 @@ function ClientsPage() {
                     variant="contained"
                     color="error"
                     disabled={isDeletingClient === clientToDelete?.id}
-                    sx={{minWidth: 120}}
+                    sx={{ minWidth: 120 }}
                 >
                     {isDeletingClient === clientToDelete?.id ? (
                         <>
-                            <CircularProgress size={20} sx={{mr: 1, color: 'white'}}/>
+                            <CircularProgress size={20} sx={{ mr: 1, color: 'white' }}/>
                             Deleting...
                         </>
                     ) : (
@@ -524,349 +609,613 @@ function ClientsPage() {
         </Dialog>
     );
 
+    const renderFilterDrawer = () => (
+    <Drawer
+        anchor="right"
+        open={showFilterDrawer}
+        onClose={() => setShowFilterDrawer(false)}
+        PaperProps={{
+            sx: {
+                width: { xs: '100%', md: 420 },
+            }
+        }}
+    >
+        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {/* Header */}
+            <Box
+                sx={{
+                    px:4,
+                    py:2,
+                    background: `black`,
+                    color: 'white',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: -20,
+                        right: -20,
+                        width: 100,
+                        height: 100,
+                        borderRadius: '50%',
+                        background: alpha('#fff', 0.1),
+                        zIndex: 0
+                    }}
+                />
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        bottom: -30,
+                        left: -30,
+                        width: 80,
+                        height: 80,
+                        borderRadius: '50%',
+                        background: alpha('#fff', 0.05),
+                        zIndex: 0
+                    }}
+                />
+
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'relative', zIndex: 1 }}>
+                    <Box>
+                        <Typography variant="h4" sx={{ fontWeight: 700, mb: 0.5 }}>
+                            Filter & Sort
+                        </Typography>
+                        <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                            Refine your client search
+                        </Typography>
+                    </Box>
+                    <IconButton
+                        onClick={() => setShowFilterDrawer(false)}
+                        sx={{
+                            color: 'white',
+                            bgcolor: alpha('#fff', 0.2),
+                            '&:hover': {
+                                bgcolor: alpha('#fff', 0.3),
+                                transform: 'rotate(90deg)'
+                            },
+                            transition: 'all 0.3s ease'
+                        }}
+                    >
+                        <Close />
+                    </IconButton>
+                </Box>
+            </Box>
+
+            <Box sx={{ flex: 1, overflow: 'auto', p: 3 }}>
+                <Stack spacing={5}>
+                    {/* Status Filter */}
+                    <Paper
+                        elevation={1}
+                        sx={{
+                            p: 3,
+                            borderRadius: 3,
+                            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                            background: alpha(theme.palette.background.paper, 0.7),
+                            backdropFilter: 'blur(5px)'
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                            <Box
+                                sx={{
+                                    p: 1.5,
+                                    borderRadius: 2,
+                                    background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.dark} 90%)`,
+                                    mr: 2
+                                }}
+                            >
+                                <CheckCircle sx={{ color: 'white', fontSize: 20 }} />
+                            </Box>
+                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                                Client Status
+                            </Typography>
+                        </Box>
+
+                        <RadioGroup
+                            name="status"
+                            value={filters.status}
+                            onChange={(e) => setFilters({...filters, status: e.target.value})}
+                        >
+                            {[
+                                { value: 'all', label: 'All Clients', icon: <Person />, color: 'primary' },
+                                { value: 'active', label: 'Active', icon: <CheckCircle />, color: 'success' },
+                                { value: 'inactive', label: 'Inactive', icon: <HourglassEmpty />, color: 'grey' },
+                                { value: 'overdue', label: 'Payment Overdue', icon: <Error />, color: 'error' },
+                                { value: 'warning', label: 'Payment Due Soon', icon: <Warning />, color: 'warning' }
+                            ].map((option) => (
+                                <FormControlLabel
+                                    key={option.value}
+                                    value={option.value}
+                                    control={
+                                        <Radio
+                                            sx={{
+                                                color: `${option.color}.main`,
+                                                '&.Mui-checked': {
+                                                    color: `${option.color}.main`
+                                                }
+                                            }}
+                                        />
+                                    }
+                                    label={
+                                        <Box sx={{ display: 'flex', alignItems: 'center', py: 0.5 }}>
+                                            <Box sx={{ mr: 2, color: `${option.color}.main` }}>
+                                                {React.cloneElement(option.icon, { sx: { fontSize: 18 } })}
+                                            </Box>
+                                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                                {option.label}
+                                            </Typography>
+                                        </Box>
+                                    }
+                                    sx={{
+                                        m: 0,
+                                        p: 1.5,
+                                        borderRadius: 2,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            bgcolor: alpha(theme.palette.primary.main, 0.05)
+                                        },
+                                        ...(filters.status === option.value && {
+                                            bgcolor: alpha(theme.palette.primary.main, 0.08),
+                                            border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                                        })
+                                    }}
+                                />
+                            ))}
+                        </RadioGroup>
+                    </Paper>
+
+                    {/* Package Filter */}
+                    <Paper
+                        elevation={1}
+                        sx={{
+                            p: 3,
+                            borderRadius: 3,
+                            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                            background: alpha(theme.palette.background.paper, 0.7),
+                            backdropFilter: 'blur(5px)'
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                            <Box
+                                sx={{
+                                    p: 1.5,
+                                    borderRadius: 2,
+                                    background: `linear-gradient(45deg, ${theme.palette.secondary.main || theme.palette.primary.main} 30%, ${theme.palette.secondary.dark || theme.palette.primary.dark} 90%)`,
+                                    mr: 2
+                                }}
+                            >
+                                <Router sx={{ color: 'white', fontSize: 20 }} />
+                            </Box>
+                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                                Package Type
+                            </Typography>
+                        </Box>
+
+                        <RadioGroup
+                            name="package"
+                            value={filters.package}
+                            onChange={(e) => setFilters({...filters, package: e.target.value})}
+                        >
+                            <FormControlLabel
+                                value="all"
+                                control={<Radio sx={{ color: 'primary.main', '&.Mui-checked': { color: 'primary.main' } }} />}
+                                label={
+                                    <Box sx={{ display: 'flex', alignItems: 'center', py: 0.5 }}>
+                                        <Box sx={{ mr: 2, color: 'primary.main' }}>
+                                            <Router sx={{ fontSize: 18 }} />
+                                        </Box>
+                                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                            All Packages
+                                        </Typography>
+                                    </Box>
+                                }
+                                sx={{
+                                    m: 0,
+                                    p: 1.5,
+                                    borderRadius: 2,
+                                    transition: 'all 0.2s ease',
+                                    '&:hover': {
+                                        bgcolor: alpha(theme.palette.primary.main, 0.05)
+                                    },
+                                    ...(filters.package === "all" && {
+                                        bgcolor: alpha(theme.palette.primary.main, 0.08),
+                                        border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                                    })
+                                }}
+                            />
+                            {uniquePackages.map((pkg, index) => (
+                                <FormControlLabel
+                                    key={index}
+                                    value={pkg}
+                                    control={<Radio sx={{ color: 'primary.main', '&.Mui-checked': { color: 'primary.main' } }} />}
+                                    label={
+                                        <Box sx={{ display: 'flex', alignItems: 'center', py: 0.5 }}>
+                                            <Box sx={{ mr: 2, color: 'primary.main' }}>
+                                                <Router sx={{ fontSize: 18 }} />
+                                            </Box>
+                                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                                {pkg}
+                                            </Typography>
+                                        </Box>
+                                    }
+                                    sx={{
+                                        m: 0,
+                                        p: 1.5,
+                                        borderRadius: 2,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            bgcolor: alpha(theme.palette.primary.main, 0.05)
+                                        },
+                                        ...(filters.package === pkg && {
+                                            bgcolor: alpha(theme.palette.primary.main, 0.08),
+                                            border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                                        })
+                                    }}
+                                />
+                            ))}
+                        </RadioGroup>
+                    </Paper>
+
+                    {/* Date Filter */}
+                    <Paper
+                        elevation={1}
+                        sx={{
+                            p: 3,
+                            borderRadius: 3,
+                            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                            background: alpha(theme.palette.background.paper, 0.7),
+                            backdropFilter: 'blur(5px)'
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                            <Box
+                                sx={{
+                                    p: 1.5,
+                                    borderRadius: 2,
+                                    background: `linear-gradient(45deg, ${theme.palette.info?.main || theme.palette.primary.main} 30%, ${theme.palette.info?.dark || theme.palette.primary.dark} 90%)`,
+                                    mr: 2
+                                }}
+                            >
+                                <CalendarToday sx={{ color: 'white', fontSize: 20 }} />
+                            </Box>
+                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                                Date Joined
+                            </Typography>
+                        </Box>
+
+                        <RadioGroup
+                            name="dateJoined"
+                            value={filters.dateJoined}
+                            onChange={(e) => setFilters({...filters, dateJoined: e.target.value})}
+                        >
+                            {[
+                                { value: 'all', label: 'All Time' },
+                                { value: 'month', label: 'This Month' },
+                                { value: 'quarter', label: 'This Quarter' },
+                                { value: 'year', label: 'This Year' }
+                            ].map((option) => (
+                                <FormControlLabel
+                                    key={option.value}
+                                    value={option.value}
+                                    control={<Radio sx={{ color: 'primary.main', '&.Mui-checked': { color: 'primary.main' } }} />}
+                                    label={
+                                        <Box sx={{ display: 'flex', alignItems: 'center', py: 0.5 }}>
+                                            <Box sx={{ mr: 2, color: 'primary.main' }}>
+                                                <CalendarToday sx={{ fontSize: 18 }} />
+                                            </Box>
+                                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                                {option.label}
+                                            </Typography>
+                                        </Box>
+                                    }
+                                    sx={{
+                                        m: 0,
+                                        p: 1.5,
+                                        borderRadius: 2,
+                                        transition: 'all 0.2s ease',
+                                        '&:hover': {
+                                            bgcolor: alpha(theme.palette.primary.main, 0.05)
+                                        },
+                                        ...(filters.dateJoined === option.value && {
+                                            bgcolor: alpha(theme.palette.primary.main, 0.08),
+                                            border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`
+                                        })
+                                    }}
+                                />
+                            ))}
+                        </RadioGroup>
+                    </Paper>
+
+                    {/* Sort Options */}
+                    <Paper
+                        elevation={1}
+                        sx={{
+                            p: 3,
+                            borderRadius: 3,
+                            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                            background: alpha(theme.palette.background.paper, 0.7),
+                            backdropFilter: 'blur(5px)'
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                            <Box
+                                sx={{
+                                    p: 1.5,
+                                    borderRadius: 2,
+                                    background: `linear-gradient(45deg, ${theme.palette.warning?.main || theme.palette.primary.main} 30%, ${theme.palette.warning?.dark || theme.palette.primary.dark} 90%)`,
+                                    mr: 2
+                                }}
+                            >
+                                <FilterList sx={{ color: 'white', fontSize: 20 }} />
+                            </Box>
+                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main' }}>
+                                Sort Order
+                            </Typography>
+                        </Box>
+
+                        <Select
+                            value={sort}
+                            onChange={(e) => setSort(e.target.value)}
+                            fullWidth
+                            sx={{
+                                borderRadius: 2,
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: alpha(theme.palette.primary.main, 0.3),
+                                    borderWidth: 2
+                                },
+                                '&:hover .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: theme.palette.primary.main
+                                },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                    borderColor: theme.palette.primary.main
+                                }
+                            }}
+                        >
+                            <MenuItem value="newest">🕒 Newest First</MenuItem>
+                            <MenuItem value="oldest">⏰ Oldest First</MenuItem>
+                            <MenuItem value="name">🔤 Name (A-Z)</MenuItem>
+                        </Select>
+                    </Paper>
+                </Stack>
+            </Box>
+
+            {/* Footer Actions */}
+            <Box
+                sx={{
+                    p: 4,
+                    background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.primary.main, 0.1)} 100%)`,
+                    borderTop: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`
+                }}
+            >
+                <Stack direction="row" spacing={2}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => {
+                            setFilters({
+                                status: "all",
+                                package: "all",
+                                dateJoined: "all"
+                            });
+                            setSort("newest");
+                        }}
+                        sx={{
+                            flex: 1,
+                            borderRadius: 3,
+                            py: 1.5,
+                            borderWidth: 2,
+                            borderColor: theme.palette.primary.main,
+                            color: theme.palette.primary.main,
+                            fontWeight: 600,
+                            '&:hover': {
+                                borderWidth: 2,
+                                borderColor: theme.palette.primary.dark,
+                                bgcolor: alpha(theme.palette.primary.main, 0.05)
+                            }
+                        }}
+                    >
+                        Reset All
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => setShowFilterDrawer(false)}
+                        sx={{
+                            flex: 1,
+                            borderRadius: 3,
+                            py: 1.5,
+                            fontWeight: 600,
+                            background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.dark} 90%)`,
+                            boxShadow: `0 4px 15px ${alpha(theme.palette.primary.main, 0.4)}`,
+                            '&:hover': {
+                                background: `linear-gradient(45deg, ${theme.palette.primary.dark} 30%, ${theme.palette.primary.main} 90%)`,
+                                transform: 'translateY(-2px)',
+                                boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.5)}`
+                            },
+                            transition: 'all 0.3s ease'
+                        }}
+                    >
+                        Apply Filters
+                    </Button>
+                </Stack>
+            </Box>
+        </Box>
+    </Drawer>
+);
 
     return (
         <>
-            <div className="p-2 bg-gray-50 dark:bg-gray-900 min-h-screen">
-                {/* Page Header */}
-                <div className="mb-6">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div>
-                            <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Clients</h1>
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                Manage your client accounts and subscriptions
-                            </p>
-                        </div>
-                        <div className="mt-4 md:mt-0">
-                            <Button
-                                variant="contained"
-                                onClick={() => Modal.addClient()}
+            <Box sx={{ p: 3, bgcolor: 'background.default', minHeight: '100vh' }}>
+                {/* Header */}
+                <Box sx={{ mb: 4 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                        <Box>
+                            <Typography
+                                variant="h3"
                                 sx={{
-                                    bgcolor: 'success.main',
-                                    '&:hover': {
-                                        bgcolor: 'success.dark'
-                                    },
-                                    px: 3,
-                                    py: 1
+                                    fontWeight: 700,
+                                    color: 'primary.main',
+                                    mb: 1,
+                                    background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.primary.dark} 90%)`,
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent'
                                 }}
-                                startIcon={<i className="bi bi-person-plus"></i>}
                             >
-                                Add Client
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+                                Clients Management
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.1rem' }}>
+                                Manage your client accounts and subscriptions
+                            </Typography>
+                        </Box>
 
-                {/* Filters and Controls */}
-                <div className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex flex-wrap gap-2">
-                            <button
-                                onClick={() => setFilters({...filters, status: "all"})}
-                                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                                    filters.status === "all"
-                                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                                        : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                                }`}
-                            >
-                                All
-                            </button>
-                            <button
-                                onClick={() => setFilters({...filters, status: "active"})}
-                                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                                    filters.status === "active"
-                                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                        : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                                }`}
-                            >
-                                Active
-                            </button>
-                            <button
-                                onClick={() => setFilters({...filters, status: "overdue"})}
-                                className={`px-3 py-1.5 rounded-full text-sm font-medium ${
-                                    filters.status === "overdue"
-                                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-                                        : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-                                }`}
-                            >
-                                Overdue
-                            </button>
-                            <button
-                                onClick={() => setShowFilterDrawer(true)}
-                                className="px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 flex items-center"
-                            >
-                                <i className="bi bi-funnel mr-1"></i> More Filters
-                            </button>
-                        </div>
+                        <Fab
+                            color="primary"
+                            onClick={() => Modal.addClient()}
+                            className={"!bg-black"}
+                        >
+                            <PersonAdd />
+                        </Fab>
+                    </Box>
+                </Box>
 
-                        <div className="flex items-center gap-2">
-                            <div className="relative w-full md:w-64">
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <i className="bi bi-search text-gray-400"></i>
-                                </div>
-                                <input
-                                    type="text"
-                                    className="w-full p-2 pl-10 text-sm bg-gray-50 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                {/* Controls */}
+                <Paper
+                    elevation={2}
+                    sx={{
+                        p: 3,
+                        mb: 3,
+                        borderRadius: 3,
+                        border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+                        background: `linear-gradient(135deg, ${alpha(theme.palette.background.paper, 0.9)} 0%, ${alpha(theme.palette.primary.main, 0.02)} 100%)`
+                    }}
+                >
+                    <Grid container spacing={3} alignItems="center">
+                        <Grid item xs={12} md={6}>
+                            <Stack direction="row" spacing={1} flexWrap="wrap">
+                                {[
+                                    { key: "all", label: "All", color: "primary" },
+                                    { key: "active", label: "Active", color: "success" },
+                                    { key: "overdue", label: "Overdue", color: "error" },
+                                    { key: "warning", label: "Warning", color: "warning" }
+                                ].map((status) => (
+                                    <Chip
+                                        key={status.key}
+                                        label={status.label}
+                                        variant={filters.status === status.key ? "filled" : "outlined"}
+                                        color={status.color as any}
+                                        clickable
+                                        onClick={() => setFilters({...filters, status: status.key})}
+                                        sx={{
+                                            fontWeight: 600,
+                                            minWidth: 80,
+                                            '&:hover': {
+                                                transform: 'scale(1.05)'
+                                            },
+                                            transition: 'all 0.2s ease'
+                                        }}
+                                    />
+                                ))}
+
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => setShowFilterDrawer(true)}
+                                    startIcon={<FilterList />}
+                                    sx={{ borderRadius: 6 }}
+                                >
+                                    More Filters
+                                </Button>
+                            </Stack>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', justifyContent: 'flex-end' }}>
+                                <TextField
+                                    size="small"
                                     placeholder="Search clients..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
+                                    sx={{
+                                        minWidth: 250,
+                                        '& .MuiOutlinedInput-root': {
+                                            borderRadius: 6,
+                                            '& fieldset': {
+                                                borderColor: alpha(theme.palette.primary.main, 0.3)
+                                            }
+                                        }
+                                    }}
+                                    InputProps={{
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Search color="primary" />
+                                            </InputAdornment>
+                                        )
+                                    }}
                                 />
-                            </div>
 
-                            <div
-                                className="flex border border-gray-300 rounded-lg overflow-hidden dark:border-gray-600">
-                                <button
-                                    onClick={() => setView("grid")}
-                                    className={`p-2 ${
-                                        view === "grid"
-                                            ? "bg-blue-500 text-white"
-                                            : "bg-white text-gray-500 dark:bg-gray-700 dark:text-gray-300"
-                                    }`}
-                                >
-                                    <i className="bi bi-grid"></i>
-                                </button>
-                                <button
-                                    onClick={() => setView("list")}
-                                    className={`p-2 ${
-                                        view === "list"
-                                            ? "bg-blue-500 text-white"
-                                            : "bg-white text-gray-500 dark:bg-gray-700 dark:text-gray-300"
-                                    }`}
-                                >
-                                    <i className="bi bi-list-ul"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                <Box sx={{ display: 'flex', borderRadius: 2, overflow: 'hidden', border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}` }}>
+                                    <IconButton
+                                        onClick={() => setView("grid")}
+                                        sx={{
+                                            bgcolor: view === "grid" ? 'primary.main' : 'transparent',
+                                            color: view === "grid" ? 'white' : 'primary.main',
+                                            borderRadius: 0,
+                                            '&:hover': {
+                                                bgcolor: view === "grid" ? 'primary.dark' : alpha(theme.palette.primary.main, 0.1)
+                                            }
+                                        }}
+                                    >
+                                        <GridView />
+                                    </IconButton>
+                                    <IconButton
+                                        onClick={() => setView("list")}
+                                        sx={{
+                                            bgcolor: view === "list" ? 'primary.main' : 'transparent',
+                                            color: view === "list" ? 'white' : 'primary.main',
+                                            borderRadius: 0,
+                                            '&:hover': {
+                                                bgcolor: view === "list" ? 'primary.dark' : alpha(theme.palette.primary.main, 0.1)
+                                            }
+                                        }}
+                                    >
+                                        <ViewList />
+                                    </IconButton>
+                                </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Paper>
 
-                {/* Client List/Grid */}
+                {/* Content */}
                 {isLoading ? (
-                    view === "grid" ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {[1, 2, 3].map((i) => (
-                                <div key={i}
-                                     className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 animate-pulse">
-                                    <div className="flex items-center space-x-4 mb-4">
-                                        <div className="rounded-full bg-gray-200 dark:bg-gray-700 h-12 w-12"></div>
-                                        <div className="flex-1">
-                                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-                                        </div>
-                                    </div>
-                                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-2"></div>
-                                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4"></div>
-                                    <div className="flex justify-between items-center mt-4">
-                                        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
-                                        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-                            <div className="animate-pulse">
-                                {[1, 2, 3, 4].map((i) => (
-                                    <div key={i} className="border-b border-gray-200 dark:border-gray-700 p-4">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="rounded-full bg-gray-200 dark:bg-gray-700 h-10 w-10"></div>
-                                            <div className="flex-1">
-                                                <div
-                                                    className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2"></div>
-                                                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-                                            </div>
-                                            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )
+                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+                        <CircularProgress size={60} thickness={4} />
+                    </Box>
                 ) : sortedClients.length > 0 ? (
                     view === "grid" ? renderGridView() : renderListView()
                 ) : (
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-                        <div
-                            className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 mb-4">
-                            <i className="bi bi-person-x text-gray-500 dark:text-gray-400 text-2xl"></i>
-                        </div>
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No clients found</h3>
-                        <p className="text-gray-500 dark:text-gray-400">
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            p: 6,
+                            textAlign: 'center',
+                            borderRadius: 3,
+                            border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`
+                        }}
+                    >
+                        <Person sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+                        <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
+                            No clients found
+                        </Typography>
+                        <Typography variant="body1" color="text.secondary">
                             {searchTerm
                                 ? `No clients matching "${searchTerm}"`
                                 : "No clients match the selected filters"}
-                        </p>
-                    </div>
+                        </Typography>
+                    </Paper>
                 )}
 
-                {/* Filter Drawer */}
-                <div
-                    className={`fixed inset-y-0 right-0 z-50 w-full md:w-80 bg-white dark:bg-gray-800 shadow-xl transform transition-transform duration-300 ${showFilterDrawer ? 'translate-x-0' : 'translate-x-full'}`}>
-                    <div className="p-4 h-full flex flex-col">
-                        <div className="flex justify-between items-center border-b pb-4 mb-4">
-                            <h3 className="text-lg font-medium text-gray-900 dark:text-white">Filter Clients</h3>
-                            <button
-                                onClick={() => setShowFilterDrawer(false)}
-                                className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
-                            >
-                                <i className="bi bi-x-lg"></i>
-                            </button>
-                        </div>
-
-                        <div className="flex-1 overflow-y-auto">
-                            <div className="mb-6">
-                                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</h4>
-                                <div className="space-y-2">
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            checked={filters.status === "all"}
-                                            onChange={() => setFilters({...filters, status: "all"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">All</span>
-                                    </label>
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            checked={filters.status === "active"}
-                                            onChange={() => setFilters({...filters, status: "active"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">Active</span>
-                                    </label>
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            checked={filters.status === "inactive"}
-                                            onChange={() => setFilters({...filters, status: "inactive"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">Inactive</span>
-                                    </label>
-
-                                </div>
-                            </div>
-
-                            <div className="mb-6">
-                                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Package</h4>
-                                <div className="space-y-2">
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="package"
-                                            checked={filters.package === "all"}
-                                            onChange={() => setFilters({...filters, package: "all"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">All Packages</span>
-                                    </label>
-                                    {uniquePackages.map((pkg, index) => (
-                                        <label key={index} className="flex items-center cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                name="package"
-                                                checked={filters.package === pkg}
-                                                onChange={() => setFilters({...filters, package: pkg})}
-                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                            />
-                                            <span className="ml-2 text-gray-700 dark:text-gray-300">{pkg}</span>
-                                        </label>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="mb-6">
-                                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date
-                                    Joined</h4>
-                                <div className="space-y-2">
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="dateJoined"
-                                            checked={filters.dateJoined === "all"}
-                                            onChange={() => setFilters({...filters, dateJoined: "all"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">All Time</span>
-                                    </label>
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="dateJoined"
-                                            checked={filters.dateJoined === "month"}
-                                            onChange={() => setFilters({...filters, dateJoined: "month"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">This Month</span>
-                                    </label>
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="dateJoined"
-                                            checked={filters.dateJoined === "quarter"}
-                                            onChange={() => setFilters({...filters, dateJoined: "quarter"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">This Quarter</span>
-                                    </label>
-                                    <label className="flex items-center cursor-pointer">
-                                        <input
-                                            type="radio"
-                                            name="dateJoined"
-                                            checked={filters.dateJoined === "year"}
-                                            onChange={() => setFilters({...filters, dateJoined: "year"})}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600"
-                                        />
-                                        <span className="ml-2 text-gray-700 dark:text-gray-300">This Year</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="mb-6">
-                                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sort By</h4>
-                                <select
-                                    value={sort}
-                                    onChange={(e) => setSort(e.target.value as SortType)}
-                                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                >
-                                    <option value="newest">Newest First</option>
-                                    <option value="oldest">Oldest First</option>
-                                    <option value="name">Name (A-Z)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div className="border-t pt-4 flex justify-between">
-                            <button
-                                onClick={() => {
-                                    setFilters({
-                                        status: "all",
-                                        package: "all",
-                                        dateJoined: "all"
-                                    });
-                                    setSort("newest");
-                                }}
-                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                            >
-                                Reset All
-                            </button>
-                            <button
-                                onClick={() => setShowFilterDrawer(false)}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                            >
-                                Apply Filters
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {renderDeleteConfirmModal()}
-
+                {renderFilterDrawer()}
+                {renderDeleteConfirmModal()}
+            </Box>
         </>
     );
 }

@@ -50,20 +50,19 @@ class CompanySerializer(serializers.ModelSerializer):
 
 class CustomerSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    full_name = serializers.CharField(source='user.get_full_name', read_only=True)
+    # name = serializers.CharField(source='full_name', read_only=True)
     phone = serializers.CharField(source='primary_phone', read_only=True)
     email = serializers.CharField(source='primary_email', read_only=True)
 
     class Meta:
         model = Customer
-        fields = ['id', 'customer_id', 'customer_type', 'status', 'user', 'full_name',
+        fields = ['id', 'customer_type', 'status', 'user', 'full_name',
                   'phone', 'email', 'primary_phone', 'secondary_phone', 'primary_email',
                   'secondary_email', 'installation_address', 'billing_address', 'city',
-                  'state', 'postal_code', 'country', 'coordinates', 'business_name',
-                  'business_registration', 'tax_id', 'activation_date', 'termination_date',
-                  'credit_limit', 'current_balance', 'preferred_language', 'auto_pay_enabled',
-                  'email_notifications', 'sms_notifications', 'created_at', 'updated_at']
-        read_only_fields = ['customer_id', 'created_at', 'updated_at']
+                  'state', 'postal_code', 'country', 'business_name', 'activation_date', 'termination_date',
+                  'credit_limit', 'current_balance', 'auto_pay_enabled',
+                  'email_notifications', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
 
 
 class PackageCategorySerializer(serializers.ModelSerializer):

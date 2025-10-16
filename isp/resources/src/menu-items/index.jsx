@@ -13,7 +13,7 @@ import settings from "@/menu-items/settings.jsx";
 // ==============================|| MENU ITEMS ||============================== //
 // Main menu items
 const menuItems = {
-    items: [dashboard, network, support, billing, analytics, team, tools, settings]
+    items: [dashboard, network, support, analytics, tools, settings]
 };
 
 export default menuItems;

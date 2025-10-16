@@ -7,6 +7,9 @@ import {BrowserRouter} from "react-router-dom";
 import SignalProvider from "@/providers/SignalProvider";
 //@ts-ignore
 import ThemeCustomization from "@/themes"
+import "@fontsource/orbitron/700.css"
+
+
 
 createInertiaApp({
     resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),

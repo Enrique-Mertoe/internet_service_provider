@@ -177,32 +177,28 @@ class Customer(TimeStampedModel):
     ]
 
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='customers')
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
-
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='customer_profile')
+    full_name = models.CharField(max_length=200)
     # Basic Information
-    customer_id = models.CharField(max_length=20, unique=True)
     customer_type = models.CharField(max_length=20, choices=CUSTOMER_TYPES, default='individual')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='lead')
 
     # Contact Information
     primary_phone = models.CharField(max_length=20)
-    secondary_phone = models.CharField(max_length=20, blank=True)
+    secondary_phone = models.CharField(max_length=20, blank=True, null=True)
     primary_email = models.EmailField()
-    secondary_email = models.EmailField(blank=True)
+    secondary_email = models.EmailField(blank=True, null=True)
 
     # Address Information
-    installation_address = models.TextField()
-    billing_address = models.TextField(blank=True)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    postal_code = models.CharField(max_length=20)
+    installation_address = models.TextField(null=True, blank=True)
+    billing_address = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
     country = models.CharField(max_length=100, default='Kenya')
-    coordinates = models.CharField(max_length=50, blank=True, help_text="Latitude, Longitude")
 
     # Business Information (for business customers)
-    business_name = models.CharField(max_length=200, blank=True)
-    business_registration = models.CharField(max_length=100, blank=True)
-    tax_id = models.CharField(max_length=50, blank=True)
+    business_name = models.CharField(max_length=200, null=True, blank=True)
 
     # Service Information
     activation_date = models.DateTimeField(null=True, blank=True)
@@ -211,7 +207,6 @@ class Customer(TimeStampedModel):
     current_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     # Preferences
-    preferred_language = models.CharField(max_length=10, default='en')
     auto_pay_enabled = models.BooleanField(default=False)
     email_notifications = models.BooleanField(default=True)
     sms_notifications = models.BooleanField(default=True)
@@ -221,13 +216,12 @@ class Customer(TimeStampedModel):
     class Meta:
         ordering = ['-created_at']
         indexes = [
-            models.Index(fields=['customer_id']),
             models.Index(fields=['status']),
             models.Index(fields=['company', 'status']),
         ]
 
     def __str__(self):
-        return f"{self.customer_id} - {self.user.get_full_name()}"
+        return f"{self.user.get_full_name()}"
 
     def get_absolute_url(self):
         return reverse('customer-detail', kwargs={'pk': self.pk})
@@ -462,10 +456,18 @@ class NetworkEquipment(TimeStampedModel):
 
     # Basic Information
     name = models.CharField(max_length=200)
+    identity = models.CharField(max_length=200)
+    username = models.CharField(max_length=200, null=True, blank=True)
+    auth_code = models.CharField(max_length=200, null=True, blank=True)
+    password = models.CharField(max_length=200, null=True, blank=True)
+    description = models.TextField(
+        blank=True,
+        help_text="Description of the equipment, including any specifics"
+    )
     equipment_type = models.CharField(max_length=20, choices=EQUIPMENT_TYPES)
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
-    serial_number = models.CharField(max_length=100, unique=True)
+    serial_number = models.CharField(max_length=100, null=True, unique=True)
 
     # Technical Specifications
     mac_address = models.CharField(

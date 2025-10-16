@@ -113,11 +113,8 @@ function PackagesPage() {
         }, 500); // Wait 500ms after typing stops
     };
 
-    const filteredPackages = packages.filter((pkg: any) => {
-        const matchesSearch = pkg.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesFilter = activeFilter === "all" || pkg.package_type === activeFilter;
-        return matchesSearch && matchesFilter;
-    });
+    // No need for client-side filtering since we're using server-side filtering
+    const filteredPackages = packages;
     // Update your filter change handler
     const handleFilterChange = (filter: string) => {
         setActiveFilter(filter);
@@ -143,7 +140,7 @@ function PackagesPage() {
             // Use the proper API endpoint from our routes
             const params: any = {};
             if (filter !== 'all') {
-                params.type = filter;
+                params.package_type = filter; // Use package_type as the filter parameter
             }
             if (search) {
                 params.search = search;
@@ -153,6 +150,7 @@ function PackagesPage() {
                 route: 'API_PACKAGE_LIST',
                 params: {
                     format: 'json',
+                    page: pageNum, // Add page parameter for pagination
                 },
                 data: params
             });
@@ -172,7 +170,8 @@ function PackagesPage() {
                     hotspot: res.data.results?.filter((p: any) => p.package_type === 'hotspot').length || 0,
                 });
 
-                setHasMore((res.data.results || res.data).length > 0);
+                // Check if there's a next page in the paginated response
+                setHasMore(!!res.data.next);
             }
         } catch (error) {
             console.error("Failed to fetch packages:", error);

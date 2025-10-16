@@ -7,32 +7,25 @@ const network = {
     children: [
         {
             id: 'network-overview',
-            title: 'Network Overview',
+            title: 'Network',
             type: 'item',
-            url: '/dashboard/network',
+            url: '/dashboard/network/',
             icon: GlobalOutlined
         },
         {
             id: 'network-devices',
-            title: 'Equipment Status',
+            title: 'Equipments',
             type: 'item',
-            url: '/dashboard/network/devices',
+            url: '/dashboard/network/equipments/',
             icon: HddOutlined
         },
         {
             id: 'network-monitoring',
-            title: 'Live Monitoring',
+            title: 'Monitoring',
             type: 'item',
             url: '/dashboard/network/monitoring',
             icon: MonitorOutlined
         },
-        {
-            id: 'network-ip',
-            title: 'IP Management',
-            type: 'item',
-            url: '/dashboard/network/ip-management',
-            icon: NodeIndexOutlined
-        }
     ]
 };
 

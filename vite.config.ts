@@ -19,7 +19,7 @@ export default defineConfig({
         //     pyPath:".venv/bin/python"
         // }),
         react({include: '**/*.disabled',}),
-        tailwindcss()],
+        tailwindcss(),],
     build: {
         outDir: resolve("./isp/static/dist"),
         assetsDir: "assets",
@@ -48,4 +48,21 @@ export default defineConfig({
         },
     },
     assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.gif'],
+    css: {
+        modules: {
+            generateScopedName:
+            // process.env.NODE_ENV !== 'production'
+                '[hash:base64:6]' // minified short class names
+            // : '[name]__[local]___[hash:base64:5]' // readable in dev
+        }
+    },
+    server: {
+    host: '0.0.0.0',
+    port: 5173,
+    cors: {
+      origin: 'http://192.168.10.9:8000', // Django origin
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type'],
+    }
+  }
 });

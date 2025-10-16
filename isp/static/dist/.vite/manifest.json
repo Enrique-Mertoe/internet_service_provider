@@ -1,350 +1,848 @@
 {
+  "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-400-normal.woff": {
+    "file": "assets/f2c-7xhglg7fqt.woff",
+    "src": "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-400-normal.woff"
+  },
+  "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-400-normal.woff2": {
+    "file": "assets/f2c-ggtimyq609.woff2",
+    "src": "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-400-normal.woff2"
+  },
+  "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-700-normal.woff": {
+    "file": "assets/f2c-ul1yi710n0.woff",
+    "src": "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-700-normal.woff"
+  },
+  "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-700-normal.woff2": {
+    "file": "assets/f2c-8veox7xsp1.woff2",
+    "src": "../../../node_modules/@fontsource/orbitron/files/orbitron-latin-700-normal.woff2"
+  },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-300-normal.woff": {
-    "file": "assets/f2c-v67t1z6kny.woff",
+    "file": "assets/f2c-lnu4oqbl2i.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-300-normal.woff2": {
-    "file": "assets/f2c-u0taz9m3fq.woff2",
+    "file": "assets/f2c-jxxsvja4o6.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-400-normal.woff": {
-    "file": "assets/f2c-gfxv90rjuw.woff",
+    "file": "assets/f2c-crx8kq2abi.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-400-normal.woff2": {
-    "file": "assets/f2c-eda4j5wkqc.woff2",
+    "file": "assets/f2c-t52nzdsncd.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-500-normal.woff": {
-    "file": "assets/f2c-xp6pgkspg6.woff",
+    "file": "assets/f2c-hhya34kbdh.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-500-normal.woff2": {
-    "file": "assets/f2c-0fnut4buds.woff2",
+    "file": "assets/f2c-zkk9kzj28w.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-700-normal.woff": {
-    "file": "assets/f2c-idizmqh8dp.woff",
+    "file": "assets/f2c-02jurdvbgu.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-700-normal.woff2": {
-    "file": "assets/f2c-as387eztgv.woff2",
+    "file": "assets/f2c-d7znslxd8z.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-300-normal.woff": {
-    "file": "assets/f2c-0bs953610h.woff",
+    "file": "assets/f2c-jj3yal5mcb.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-300-normal.woff2": {
-    "file": "assets/f2c-12ugfj0ph7.woff2",
+    "file": "assets/f2c-f2dbd8iydl.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-400-normal.woff": {
-    "file": "assets/f2c-fxqm2jo5cz.woff",
+    "file": "assets/f2c-3nt3g7mwf2.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-400-normal.woff2": {
-    "file": "assets/f2c-i6szyja6hm.woff2",
+    "file": "assets/f2c-s1qzgd0xtu.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-500-normal.woff": {
-    "file": "assets/f2c-b8l2af28pe.woff",
+    "file": "assets/f2c-npbqw9v1pz.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-500-normal.woff2": {
-    "file": "assets/f2c-c0thvrsokx.woff2",
+    "file": "assets/f2c-vwq5uqvp9i.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-700-normal.woff": {
-    "file": "assets/f2c-dwu3gi2rp1.woff",
+    "file": "assets/f2c-z3p7tenlw7.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-700-normal.woff2": {
-    "file": "assets/f2c-wuputtysvy.woff2",
+    "file": "assets/f2c-qjatirhtkk.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-cyrillic-ext-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-300-normal.woff": {
-    "file": "assets/f2c-z2fblunjjo.woff",
+    "file": "assets/f2c-mqjv7c18wo.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-300-normal.woff2": {
-    "file": "assets/f2c-esy0kf4e7p.woff2",
+    "file": "assets/f2c-g5siqkdr6d.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-400-normal.woff": {
-    "file": "assets/f2c-8e4by8ov57.woff",
+    "file": "assets/f2c-rngwwajvqu.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-400-normal.woff2": {
-    "file": "assets/f2c-v73jwnqhpm.woff2",
+    "file": "assets/f2c-8wbytycg3a.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-500-normal.woff": {
-    "file": "assets/f2c-o4uvb261w7.woff",
+    "file": "assets/f2c-xj1vfenl09.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-500-normal.woff2": {
-    "file": "assets/f2c-wc11x6np80.woff2",
+    "file": "assets/f2c-8s62tlqwp7.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-700-normal.woff": {
-    "file": "assets/f2c-py7z9tujr7.woff",
+    "file": "assets/f2c-h0cc8hhq8j.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-greek-700-normal.woff2": {
-    "file": "assets/f2c-a5nascui9d.woff2",
+    "file": "assets/f2c-5ylyuwya5y.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-greek-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-300-normal.woff": {
-    "file": "assets/f2c-z01ln2drgs.woff",
+    "file": "assets/f2c-6e63kgzewa.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-300-normal.woff2": {
-    "file": "assets/f2c-k0ap9k4j1h.woff2",
+    "file": "assets/f2c-11hdsuwqoj.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff": {
-    "file": "assets/f2c-6jsr1epftc.woff",
+    "file": "assets/f2c-iavk51oxxz.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2": {
-    "file": "assets/f2c-gilo5438gr.woff2",
+    "file": "assets/f2c-mxbpsta4o1.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-500-normal.woff": {
-    "file": "assets/f2c-0uep2fv8v4.woff",
+    "file": "assets/f2c-d8tn5s6kpp.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-500-normal.woff2": {
-    "file": "assets/f2c-pl16of642b.woff2",
+    "file": "assets/f2c-zkce5b052v.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff": {
-    "file": "assets/f2c-4elr149ad.woff",
+    "file": "assets/f2c-q27ro0aram.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff2": {
-    "file": "assets/f2c-5dj2uggmnm.woff2",
+    "file": "assets/f2c-molv331ume.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-300-normal.woff": {
-    "file": "assets/f2c-evpeu3kaes.woff",
+    "file": "assets/f2c-ntslhwbt1r.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-300-normal.woff2": {
-    "file": "assets/f2c-vrawj95o2d.woff2",
+    "file": "assets/f2c-ks0e1uvc01.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-400-normal.woff": {
-    "file": "assets/f2c-3oilg5nxxl.woff",
+    "file": "assets/f2c-z4xsrjrpm8.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-400-normal.woff2": {
-    "file": "assets/f2c-rlftilx91u.woff2",
+    "file": "assets/f2c-qzy7n41ovn.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-500-normal.woff": {
-    "file": "assets/f2c-xadv7xdgzn.woff",
+    "file": "assets/f2c-jqasvlvb04.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-500-normal.woff2": {
-    "file": "assets/f2c-58ydynuix1.woff2",
+    "file": "assets/f2c-0wwwctgcwy.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-700-normal.woff": {
-    "file": "assets/f2c-e5i40vj89z.woff",
+    "file": "assets/f2c-vfdg517l7n.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-700-normal.woff2": {
-    "file": "assets/f2c-yjwyalbcuv.woff2",
+    "file": "assets/f2c-onhbulbsre.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-latin-ext-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-300-normal.woff": {
-    "file": "assets/f2c-k96zy2u8cb.woff",
+    "file": "assets/f2c-y5em18c159.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-300-normal.woff2": {
-    "file": "assets/f2c-vqtbr9xb83.woff2",
+    "file": "assets/f2c-p6gi4nr3ym.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-400-normal.woff": {
-    "file": "assets/f2c-3wsqkgn95d.woff",
+    "file": "assets/f2c-5h8wa7hvuy.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-400-normal.woff2": {
-    "file": "assets/f2c-7sbnpvbic4.woff2",
+    "file": "assets/f2c-1vicit85jj.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-500-normal.woff": {
-    "file": "assets/f2c-8hm0mr0d71.woff",
+    "file": "assets/f2c-y3q62tz9iu.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-500-normal.woff2": {
-    "file": "assets/f2c-uzzxr8ox3z.woff2",
+    "file": "assets/f2c-lp1ls0vc9m.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-700-normal.woff": {
-    "file": "assets/f2c-kayp8pvm10.woff",
+    "file": "assets/f2c-rbw4dvrjo6.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-math-700-normal.woff2": {
-    "file": "assets/f2c-0ay1vg7wgf.woff2",
+    "file": "assets/f2c-ggy60dzkg0.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-math-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-300-normal.woff": {
-    "file": "assets/f2c-l0w0yq45tr.woff",
+    "file": "assets/f2c-y7ghd65uli.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-300-normal.woff2": {
-    "file": "assets/f2c-t08z3f6jhx.woff2",
+    "file": "assets/f2c-s55ykwbygz.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-400-normal.woff": {
-    "file": "assets/f2c-wfyf0otxmh.woff",
+    "file": "assets/f2c-dkag8zcrhn.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-400-normal.woff2": {
-    "file": "assets/f2c-pvz94npbbx.woff2",
+    "file": "assets/f2c-4i56mhhye9.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-500-normal.woff": {
-    "file": "assets/f2c-ekv9ehynsx.woff",
+    "file": "assets/f2c-llv7xng0jx.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-500-normal.woff2": {
-    "file": "assets/f2c-e04nlr8qu7.woff2",
+    "file": "assets/f2c-u877jjkf02.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-700-normal.woff": {
-    "file": "assets/f2c-ydpqp5gbem.woff",
+    "file": "assets/f2c-o5vnk5dhp0.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-symbols-700-normal.woff2": {
-    "file": "assets/f2c-4hg28g4nc7.woff2",
+    "file": "assets/f2c-309z5b772y.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-symbols-700-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-300-normal.woff": {
-    "file": "assets/f2c-zngndxplai.woff",
+    "file": "assets/f2c-vdvjcg9lus.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-300-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-300-normal.woff2": {
-    "file": "assets/f2c-98glq3yeop.woff2",
+    "file": "assets/f2c-1lpunm26zl.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-300-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-400-normal.woff": {
-    "file": "assets/f2c-6xggpsgk8s.woff",
+    "file": "assets/f2c-b3d05wu658.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-400-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-400-normal.woff2": {
-    "file": "assets/f2c-95xauuepnc.woff2",
+    "file": "assets/f2c-vvcz0z6nih.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-400-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-500-normal.woff": {
-    "file": "assets/f2c-ncrarb6aor.woff",
+    "file": "assets/f2c-3xia4tv5ub.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-500-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-500-normal.woff2": {
-    "file": "assets/f2c-3l3k8jxafk.woff2",
+    "file": "assets/f2c-rbg0yo9o9c.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-500-normal.woff2"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-700-normal.woff": {
-    "file": "assets/f2c-o89l7je63r.woff",
+    "file": "assets/f2c-ywil87g5q0.woff",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-700-normal.woff"
   },
   "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-700-normal.woff2": {
-    "file": "assets/f2c-xrwc9rsoyr.woff2",
+    "file": "assets/f2c-6dckiqdlg4.woff2",
     "src": "../../../node_modules/@fontsource/roboto/files/roboto-vietnamese-700-normal.woff2"
   },
-  "_f2c-vcjdo4twqf.js": {
-    "file": "f2c-vcjdo4twqf.js",
+  "_f2c-0278jea45q.js": {
+    "file": "f2c-0278jea45q.js",
     "name": "Stack",
+    "imports": [
+      "main.tsx",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-05sb4h2b2g.js": {
+    "file": "f2c-05sb4h2b2g.js",
+    "name": "Link",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-0nzm67hmmg.js": {
+    "file": "f2c-0nzm67hmmg.js",
+    "name": "Tabs",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js"
+    ]
+  },
+  "_f2c-0vf62mdrvq.js": {
+    "file": "f2c-0vf62mdrvq.js",
+    "name": "styled",
     "imports": [
       "main.tsx"
     ]
   },
+  "_f2c-1tf798b1n5.js": {
+    "file": "f2c-1tf798b1n5.js",
+    "name": "routes"
+  },
+  "_f2c-1x0otovpq5.js": {
+    "file": "f2c-1x0otovpq5.js",
+    "name": "IconButton",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-20v5zu1pgp.js": {
+    "file": "f2c-20v5zu1pgp.js",
+    "name": "Person",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-23tr2xcm1k.js": {
+    "file": "f2c-23tr2xcm1k.js",
+    "name": "useItemHighlightedGetter",
+    "imports": [
+      "_f2c-fpxviy4x8z.js"
+    ]
+  },
+  "_f2c-2b1wr7mw1o.js": {
+    "file": "f2c-2b1wr7mw1o.js",
+    "name": "TextField",
+    "imports": [
+      "main.tsx",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-ckucvpz5wd.js"
+    ]
+  },
+  "_f2c-2dduaq4mfw.js": {
+    "file": "f2c-2dduaq4mfw.js",
+    "name": "ChartsGrid",
+    "imports": [
+      "_f2c-fpxviy4x8z.js",
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-63a1nam45p.js"
+    ]
+  },
+  "_f2c-2z2urfyeib.js": {
+    "file": "f2c-2z2urfyeib.js",
+    "name": "Select",
+    "imports": [
+      "main.tsx",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-j7zy9wfuf2.js"
+    ]
+  },
+  "_f2c-4md6xolfuy.js": {
+    "file": "f2c-4md6xolfuy.js",
+    "name": "InputAdornment",
+    "imports": [
+      "main.tsx",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-4ze6nnhj0q.js": {
+    "file": "f2c-4ze6nnhj0q.js",
+    "name": "index",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-54skaqlk3b.js": {
+    "file": "f2c-54skaqlk3b.js",
+    "name": "VisibilityOff",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-55grk8fy7y.js": {
+    "file": "f2c-55grk8fy7y.js",
+    "name": "FormControlLabel",
+    "imports": [
+      "main.tsx",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-63a1nam45p.js": {
+    "file": "f2c-63a1nam45p.js",
+    "name": "Portal",
+    "imports": [
+      "_f2c-1x0otovpq5.js",
+      "_f2c-y02xsodu5u.js",
+      "main.tsx"
+    ]
+  },
+  "_f2c-6sp45h0hm4.js": {
+    "file": "f2c-6sp45h0hm4.js",
+    "name": "OutlinedInput",
+    "imports": [
+      "main.tsx",
+      "_f2c-63a1nam45p.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-wo86paz8en.js"
+    ]
+  },
+  "_f2c-6xl05t23u3.js": {
+    "file": "f2c-6xl05t23u3.js",
+    "name": "Button",
+    "imports": [
+      "main.tsx",
+      "_f2c-gq71heio11.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-j7zy9wfuf2.js"
+    ],
+    "assets": [
+      "assets/f2c-7937pigeri.png"
+    ]
+  },
+  "_f2c-c7utr00r7l.js": {
+    "file": "f2c-c7utr00r7l.js",
+    "name": "Settings",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-ckucvpz5wd.js": {
+    "file": "f2c-ckucvpz5wd.js",
+    "name": "useFormControl",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-cwjs9x3kxe.js": {
+    "file": "f2c-cwjs9x3kxe.js",
+    "name": "index",
+    "imports": [
+      "main.tsx",
+      "_f2c-63a1nam45p.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-eck7rofj2q.js": {
+    "file": "f2c-eck7rofj2q.js",
+    "name": "KeyboardArrowDown",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-f3e7jw6gex.js": {
+    "file": "f2c-f3e7jw6gex.js",
+    "name": "TrendingUp",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-fpxviy4x8z.js": {
+    "file": "f2c-fpxviy4x8z.js",
+    "name": "ChartsWrapper",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js"
+    ]
+  },
+  "_f2c-fybl2ck85x.js": {
+    "file": "f2c-fybl2ck85x.js",
+    "name": "SwitchBase",
+    "imports": [
+      "main.tsx",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-gq71heio11.js": {
+    "file": "f2c-gq71heio11.js",
+    "name": "utils"
+  },
+  "_f2c-h7ulvo5tjo.js": {
+    "file": "f2c-h7ulvo5tjo.js",
+    "name": "Grid",
+    "imports": [
+      "_f2c-y02xsodu5u.js",
+      "main.tsx",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-wo86paz8en.js"
+    ]
+  },
+  "_f2c-hl8mpw6w7j.js": {
+    "file": "f2c-hl8mpw6w7j.js",
+    "name": "Visibility",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-irwac37moy.js": {
+    "file": "f2c-irwac37moy.js",
+    "name": "Checkbox",
+    "imports": [
+      "main.tsx",
+      "_f2c-fybl2ck85x.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-6sp45h0hm4.js"
+    ]
+  },
+  "_f2c-j7zy9wfuf2.js": {
+    "file": "f2c-j7zy9wfuf2.js",
+    "name": "Paper",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-mfe0hohxhp.js": {
+    "file": "f2c-mfe0hohxhp.js",
+    "name": "api",
+    "imports": [
+      "main.tsx",
+      "_f2c-1tf798b1n5.js"
+    ]
+  },
+  "_f2c-n4boqeiqzp.js": {
+    "file": "f2c-n4boqeiqzp.js",
+    "name": "MenuItem",
+    "imports": [
+      "main.tsx",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-nzv8pj89b1.js"
+    ]
+  },
+  "_f2c-nyv6omcho3.js": {
+    "file": "f2c-nyv6omcho3.js",
+    "name": "Card",
+    "imports": [
+      "main.tsx",
+      "_f2c-j7zy9wfuf2.js"
+    ]
+  },
+  "_f2c-nzv8pj89b1.js": {
+    "file": "f2c-nzv8pj89b1.js",
+    "name": "listItemTextClasses",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-o8gins9kn4.js": {
+    "file": "f2c-o8gins9kn4.js",
+    "name": "Alert",
+    "imports": [
+      "main.tsx",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-j7zy9wfuf2.js"
+    ]
+  },
+  "_f2c-ogavvsf1rw.js": {
+    "file": "f2c-ogavvsf1rw.js",
+    "name": "Chip",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-1x0otovpq5.js"
+    ]
+  },
+  "_f2c-pdxeztv7ws.js": {
+    "file": "f2c-pdxeztv7ws.js",
+    "name": "Box",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-t15pamk55f.js": {
+    "file": "f2c-t15pamk55f.js",
+    "name": "NetworkUsageChart",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-t6ua2bc658.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-fpxviy4x8z.js",
+      "_f2c-2dduaq4mfw.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-23tr2xcm1k.js"
+    ]
+  },
+  "_f2c-t3imog46tj.js": {
+    "file": "f2c-t3imog46tj.js",
+    "name": "shortcuts",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js"
+    ]
+  },
+  "_f2c-t6ua2bc658.js": {
+    "file": "f2c-t6ua2bc658.js",
+    "name": "createLucideIcon",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-tlw8cz1wjm.js": {
+    "file": "f2c-tlw8cz1wjm.js",
+    "name": "Wifi",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-u8zcvwb1zu.js": {
+    "file": "f2c-u8zcvwb1zu.js",
+    "name": "Tooltip",
+    "imports": [
+      "main.tsx",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-cwjs9x3kxe.js"
+    ]
+  },
+  "_f2c-vajirbo81h.js": {
+    "file": "f2c-vajirbo81h.js",
+    "name": "Container",
+    "imports": [
+      "main.tsx",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-vyxubqrv5r.js": {
+    "file": "f2c-vyxubqrv5r.js",
+    "name": "index",
+    "imports": [
+      "main.tsx",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-y02xsodu5u.js"
+    ]
+  },
+  "_f2c-wo86paz8en.js": {
+    "file": "f2c-wo86paz8en.js",
+    "name": "isMuiElement",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-y02xsodu5u.js": {
+    "file": "f2c-y02xsodu5u.js",
+    "name": "Button",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-ye02bzxbgb.js": {
+    "file": "f2c-ye02bzxbgb.js",
+    "name": "CardContent",
+    "imports": [
+      "main.tsx"
+    ]
+  },
+  "_f2c-z8u5xyxwvk.js": {
+    "file": "f2c-z8u5xyxwvk.js",
+    "name": "index",
+    "imports": [
+      "main.tsx",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-wo86paz8en.js"
+    ]
+  },
   "main.tsx": {
-    "file": "f2c-e9y2atsng5.js",
+    "file": "f2c-h3cuaszxaa.js",
     "name": "main",
     "src": "main.tsx",
     "isEntry": true,
     "dynamicImports": [
       "pages/About.tsx",
       "pages/Index.tsx",
+      "pages/auth/company-setup.tsx",
+      "pages/auth/confirm-password.tsx",
+      "pages/auth/forgot-password.tsx",
       "pages/auth/login.tsx",
-      "pages/auth/verify-email.tsx"
+      "pages/auth/register.tsx",
+      "pages/auth/reset-password.tsx",
+      "pages/auth/verify-email.tsx",
+      "pages/dashboard/clients/index.tsx",
+      "pages/dashboard/components/DashStatsCard.tsx",
+      "_f2c-t15pamk55f.js",
+      "pages/dashboard/components/RevenuGraph.tsx",
+      "pages/dashboard/components/RevenueDashBoard.tsx",
+      "pages/dashboard/equipments/index.tsx",
+      "pages/dashboard/index.tsx",
+      "pages/dashboard/network/index.tsx",
+      "pages/dashboard/packages/index.tsx",
+      "pages/dashboard/page.view.tsx",
+      "pages/dashboard/settings/index.tsx",
+      "pages/landing/index.tsx"
     ],
     "css": [
-      "assets/f2c-405g8zlrvh.css"
+      "assets/f2c-uei769cu5f.css"
     ],
     "assets": [
-      "assets/f2c-12ugfj0ph7.woff2",
-      "assets/f2c-0bs953610h.woff",
-      "assets/f2c-u0taz9m3fq.woff2",
-      "assets/f2c-v67t1z6kny.woff",
-      "assets/f2c-esy0kf4e7p.woff2",
-      "assets/f2c-z2fblunjjo.woff",
-      "assets/f2c-vqtbr9xb83.woff2",
-      "assets/f2c-k96zy2u8cb.woff",
-      "assets/f2c-t08z3f6jhx.woff2",
-      "assets/f2c-l0w0yq45tr.woff",
-      "assets/f2c-98glq3yeop.woff2",
-      "assets/f2c-zngndxplai.woff",
-      "assets/f2c-vrawj95o2d.woff2",
-      "assets/f2c-evpeu3kaes.woff",
-      "assets/f2c-k0ap9k4j1h.woff2",
-      "assets/f2c-z01ln2drgs.woff",
-      "assets/f2c-i6szyja6hm.woff2",
-      "assets/f2c-fxqm2jo5cz.woff",
-      "assets/f2c-eda4j5wkqc.woff2",
-      "assets/f2c-gfxv90rjuw.woff",
-      "assets/f2c-v73jwnqhpm.woff2",
-      "assets/f2c-8e4by8ov57.woff",
-      "assets/f2c-7sbnpvbic4.woff2",
-      "assets/f2c-3wsqkgn95d.woff",
-      "assets/f2c-pvz94npbbx.woff2",
-      "assets/f2c-wfyf0otxmh.woff",
-      "assets/f2c-95xauuepnc.woff2",
-      "assets/f2c-6xggpsgk8s.woff",
-      "assets/f2c-rlftilx91u.woff2",
-      "assets/f2c-3oilg5nxxl.woff",
-      "assets/f2c-gilo5438gr.woff2",
-      "assets/f2c-6jsr1epftc.woff",
-      "assets/f2c-c0thvrsokx.woff2",
-      "assets/f2c-b8l2af28pe.woff",
-      "assets/f2c-0fnut4buds.woff2",
-      "assets/f2c-xp6pgkspg6.woff",
-      "assets/f2c-wc11x6np80.woff2",
-      "assets/f2c-o4uvb261w7.woff",
-      "assets/f2c-uzzxr8ox3z.woff2",
-      "assets/f2c-8hm0mr0d71.woff",
-      "assets/f2c-e04nlr8qu7.woff2",
-      "assets/f2c-ekv9ehynsx.woff",
-      "assets/f2c-3l3k8jxafk.woff2",
-      "assets/f2c-ncrarb6aor.woff",
-      "assets/f2c-58ydynuix1.woff2",
-      "assets/f2c-xadv7xdgzn.woff",
-      "assets/f2c-pl16of642b.woff2",
-      "assets/f2c-0uep2fv8v4.woff",
-      "assets/f2c-wuputtysvy.woff2",
-      "assets/f2c-dwu3gi2rp1.woff",
-      "assets/f2c-as387eztgv.woff2",
-      "assets/f2c-idizmqh8dp.woff",
-      "assets/f2c-a5nascui9d.woff2",
-      "assets/f2c-py7z9tujr7.woff",
-      "assets/f2c-0ay1vg7wgf.woff2",
-      "assets/f2c-kayp8pvm10.woff",
-      "assets/f2c-4hg28g4nc7.woff2",
-      "assets/f2c-ydpqp5gbem.woff",
-      "assets/f2c-xrwc9rsoyr.woff2",
-      "assets/f2c-o89l7je63r.woff",
-      "assets/f2c-yjwyalbcuv.woff2",
-      "assets/f2c-e5i40vj89z.woff",
-      "assets/f2c-5dj2uggmnm.woff2",
-      "assets/f2c-4elr149ad.woff"
+      "assets/f2c-f2dbd8iydl.woff2",
+      "assets/f2c-jj3yal5mcb.woff",
+      "assets/f2c-jxxsvja4o6.woff2",
+      "assets/f2c-lnu4oqbl2i.woff",
+      "assets/f2c-g5siqkdr6d.woff2",
+      "assets/f2c-mqjv7c18wo.woff",
+      "assets/f2c-p6gi4nr3ym.woff2",
+      "assets/f2c-y5em18c159.woff",
+      "assets/f2c-s55ykwbygz.woff2",
+      "assets/f2c-y7ghd65uli.woff",
+      "assets/f2c-1lpunm26zl.woff2",
+      "assets/f2c-vdvjcg9lus.woff",
+      "assets/f2c-ks0e1uvc01.woff2",
+      "assets/f2c-ntslhwbt1r.woff",
+      "assets/f2c-11hdsuwqoj.woff2",
+      "assets/f2c-6e63kgzewa.woff",
+      "assets/f2c-s1qzgd0xtu.woff2",
+      "assets/f2c-3nt3g7mwf2.woff",
+      "assets/f2c-t52nzdsncd.woff2",
+      "assets/f2c-crx8kq2abi.woff",
+      "assets/f2c-8wbytycg3a.woff2",
+      "assets/f2c-rngwwajvqu.woff",
+      "assets/f2c-1vicit85jj.woff2",
+      "assets/f2c-5h8wa7hvuy.woff",
+      "assets/f2c-4i56mhhye9.woff2",
+      "assets/f2c-dkag8zcrhn.woff",
+      "assets/f2c-vvcz0z6nih.woff2",
+      "assets/f2c-b3d05wu658.woff",
+      "assets/f2c-qzy7n41ovn.woff2",
+      "assets/f2c-z4xsrjrpm8.woff",
+      "assets/f2c-mxbpsta4o1.woff2",
+      "assets/f2c-iavk51oxxz.woff",
+      "assets/f2c-vwq5uqvp9i.woff2",
+      "assets/f2c-npbqw9v1pz.woff",
+      "assets/f2c-zkk9kzj28w.woff2",
+      "assets/f2c-hhya34kbdh.woff",
+      "assets/f2c-8s62tlqwp7.woff2",
+      "assets/f2c-xj1vfenl09.woff",
+      "assets/f2c-lp1ls0vc9m.woff2",
+      "assets/f2c-y3q62tz9iu.woff",
+      "assets/f2c-u877jjkf02.woff2",
+      "assets/f2c-llv7xng0jx.woff",
+      "assets/f2c-rbg0yo9o9c.woff2",
+      "assets/f2c-3xia4tv5ub.woff",
+      "assets/f2c-0wwwctgcwy.woff2",
+      "assets/f2c-jqasvlvb04.woff",
+      "assets/f2c-zkce5b052v.woff2",
+      "assets/f2c-d8tn5s6kpp.woff",
+      "assets/f2c-qjatirhtkk.woff2",
+      "assets/f2c-z3p7tenlw7.woff",
+      "assets/f2c-d7znslxd8z.woff2",
+      "assets/f2c-02jurdvbgu.woff",
+      "assets/f2c-5ylyuwya5y.woff2",
+      "assets/f2c-h0cc8hhq8j.woff",
+      "assets/f2c-ggy60dzkg0.woff2",
+      "assets/f2c-rbw4dvrjo6.woff",
+      "assets/f2c-309z5b772y.woff2",
+      "assets/f2c-o5vnk5dhp0.woff",
+      "assets/f2c-6dckiqdlg4.woff2",
+      "assets/f2c-ywil87g5q0.woff",
+      "assets/f2c-onhbulbsre.woff2",
+      "assets/f2c-vfdg517l7n.woff",
+      "assets/f2c-molv331ume.woff2",
+      "assets/f2c-q27ro0aram.woff",
+      "assets/f2c-ggtimyq609.woff2",
+      "assets/f2c-7xhglg7fqt.woff",
+      "assets/f2c-8veox7xsp1.woff2",
+      "assets/f2c-ul1yi710n0.woff"
     ]
   },
   "pages/About.tsx": {
-    "file": "f2c-3a54y6wxeh.js",
+    "file": "f2c-l52i8yyped.js",
     "name": "About",
     "src": "pages/About.tsx",
     "isDynamicEntry": true,
@@ -353,7 +851,7 @@
     ]
   },
   "pages/Index.tsx": {
-    "file": "f2c-vve436jydk.js",
+    "file": "f2c-4cep7qmi84.js",
     "name": "Index",
     "src": "pages/Index.tsx",
     "isDynamicEntry": true,
@@ -361,31 +859,630 @@
       "main.tsx"
     ]
   },
+  "pages/auth/company-setup.tsx": {
+    "file": "f2c-88p0mk2j5b.js",
+    "name": "company-setup",
+    "src": "pages/auth/company-setup.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-nzv8pj89b1.js"
+    ]
+  },
+  "pages/auth/confirm-password.tsx": {
+    "file": "f2c-7dw42pgnrp.js",
+    "name": "confirm-password",
+    "src": "pages/auth/confirm-password.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-6xl05t23u3.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-54skaqlk3b.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-2z2urfyeib.js"
+    ]
+  },
+  "pages/auth/forgot-password.tsx": {
+    "file": "f2c-k0l2stg56z.js",
+    "name": "forgot-password",
+    "src": "pages/auth/forgot-password.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-6xl05t23u3.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-2z2urfyeib.js"
+    ]
+  },
   "pages/auth/login.tsx": {
-    "file": "f2c-o0bmeya4f3.js",
+    "file": "f2c-y2869n53d4.js",
     "name": "login",
     "src": "pages/auth/login.tsx",
     "isDynamicEntry": true,
     "imports": [
       "main.tsx",
-      "_f2c-vcjdo4twqf.js"
-    ],
-    "assets": [
-      "assets/f2c-8dlte9c3r8.png"
+      "_f2c-6xl05t23u3.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-54skaqlk3b.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-55grk8fy7y.js",
+      "_f2c-irwac37moy.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-fybl2ck85x.js"
+    ]
+  },
+  "pages/auth/register.tsx": {
+    "file": "f2c-di6qhufcki.js",
+    "name": "register",
+    "src": "pages/auth/register.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-6xl05t23u3.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-54skaqlk3b.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-55grk8fy7y.js",
+      "_f2c-irwac37moy.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-fybl2ck85x.js"
+    ]
+  },
+  "pages/auth/reset-password.tsx": {
+    "file": "f2c-9asqy3ivsj.js",
+    "name": "reset-password",
+    "src": "pages/auth/reset-password.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-6xl05t23u3.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-54skaqlk3b.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-2z2urfyeib.js"
     ]
   },
   "pages/auth/verify-email.tsx": {
-    "file": "f2c-gz5buca4p8.js",
+    "file": "f2c-z3jlj3dq5x.js",
     "name": "verify-email",
     "src": "pages/auth/verify-email.tsx",
     "isDynamicEntry": true,
     "imports": [
       "main.tsx",
-      "_f2c-vcjdo4twqf.js"
+      "_f2c-vajirbo81h.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-1x0otovpq5.js"
+    ]
+  },
+  "pages/dashboard/clients/index.tsx": {
+    "file": "f2c-5dzxp23u81.js",
+    "name": "index",
+    "src": "pages/dashboard/clients/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-z8u5xyxwvk.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-t3imog46tj.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-20v5zu1pgp.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-54skaqlk3b.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-55grk8fy7y.js",
+      "_f2c-fybl2ck85x.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-nzv8pj89b1.js"
+    ]
+  },
+  "pages/dashboard/components/DashStatsCard.tsx": {
+    "file": "f2c-4qh2samxwl.js",
+    "name": "DashStatsCard",
+    "src": "pages/dashboard/components/DashStatsCard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "pages/dashboard/components/RevenueDashBoard.tsx",
+      "_f2c-t3imog46tj.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-20v5zu1pgp.js",
+      "_f2c-c7utr00r7l.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-fpxviy4x8z.js",
+      "_f2c-23tr2xcm1k.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-fybl2ck85x.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-eck7rofj2q.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-nzv8pj89b1.js"
+    ]
+  },
+  "pages/dashboard/components/RevenuGraph.tsx": {
+    "file": "f2c-4ryc3zlep1.js",
+    "name": "RevenuGraph",
+    "src": "pages/dashboard/components/RevenuGraph.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-eck7rofj2q.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-fpxviy4x8z.js",
+      "_f2c-2dduaq4mfw.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-cwjs9x3kxe.js"
+    ]
+  },
+  "pages/dashboard/components/RevenueDashBoard.tsx": {
+    "file": "f2c-kf3flwydyn.js",
+    "name": "RevenueDashBoard",
+    "src": "pages/dashboard/components/RevenueDashBoard.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-fybl2ck85x.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-eck7rofj2q.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-wo86paz8en.js"
+    ]
+  },
+  "pages/dashboard/equipments/index.tsx": {
+    "file": "f2c-lpnb6tuhfd.js",
+    "name": "index",
+    "src": "pages/dashboard/equipments/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-z8u5xyxwvk.js",
+      "_f2c-t3imog46tj.js",
+      "_f2c-t6ua2bc658.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-gq71heio11.js"
+    ]
+  },
+  "pages/dashboard/index.tsx": {
+    "file": "f2c-5qlalwmoz5.js",
+    "name": "index",
+    "src": "pages/dashboard/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-z8u5xyxwvk.js",
+      "pages/dashboard/page.view.tsx",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0nzm67hmmg.js",
+      "pages/dashboard/components/DashStatsCard.tsx",
+      "pages/dashboard/components/RevenueDashBoard.tsx",
+      "_f2c-fybl2ck85x.js",
+      "_f2c-eck7rofj2q.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-t3imog46tj.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-20v5zu1pgp.js",
+      "_f2c-c7utr00r7l.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-fpxviy4x8z.js",
+      "_f2c-23tr2xcm1k.js",
+      "pages/dashboard/components/RevenuGraph.tsx",
+      "_f2c-2dduaq4mfw.js",
+      "_f2c-t15pamk55f.js",
+      "_f2c-t6ua2bc658.js"
+    ]
+  },
+  "pages/dashboard/network/index.tsx": {
+    "file": "f2c-zz2fp487cg.js",
+    "name": "index",
+    "src": "pages/dashboard/network/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-z8u5xyxwvk.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0nzm67hmmg.js"
+    ]
+  },
+  "pages/dashboard/packages/index.tsx": {
+    "file": "f2c-70cbmwj8yp.js",
+    "name": "index",
+    "src": "pages/dashboard/packages/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-z8u5xyxwvk.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-t3imog46tj.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-gq71heio11.js"
+    ]
+  },
+  "pages/dashboard/page.view.tsx": {
+    "file": "f2c-1gqjuaf1xr.js",
+    "name": "page.view",
+    "src": "pages/dashboard/page.view.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "pages/dashboard/components/DashStatsCard.tsx",
+      "pages/dashboard/components/RevenuGraph.tsx",
+      "_f2c-t15pamk55f.js",
+      "_f2c-t6ua2bc658.js",
+      "pages/dashboard/components/RevenueDashBoard.tsx",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-fybl2ck85x.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-eck7rofj2q.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-tlw8cz1wjm.js",
+      "_f2c-t3imog46tj.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-2z2urfyeib.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-o8gins9kn4.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-ogavvsf1rw.js",
+      "_f2c-2b1wr7mw1o.js",
+      "_f2c-mfe0hohxhp.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-n4boqeiqzp.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-gq71heio11.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-20v5zu1pgp.js",
+      "_f2c-c7utr00r7l.js",
+      "_f2c-f3e7jw6gex.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-fpxviy4x8z.js",
+      "_f2c-23tr2xcm1k.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-2dduaq4mfw.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js"
+    ]
+  },
+  "pages/dashboard/settings/index.tsx": {
+    "file": "f2c-nlvb78c5wv.js",
+    "name": "index",
+    "src": "pages/dashboard/settings/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-z8u5xyxwvk.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-4ze6nnhj0q.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-20v5zu1pgp.js",
+      "_f2c-c7utr00r7l.js",
+      "_f2c-j7zy9wfuf2.js",
+      "_f2c-0nzm67hmmg.js",
+      "_f2c-vyxubqrv5r.js",
+      "_f2c-6sp45h0hm4.js",
+      "_f2c-63a1nam45p.js",
+      "_f2c-1x0otovpq5.js",
+      "_f2c-ckucvpz5wd.js",
+      "_f2c-wo86paz8en.js",
+      "_f2c-nyv6omcho3.js",
+      "_f2c-ye02bzxbgb.js",
+      "_f2c-0278jea45q.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-05sb4h2b2g.js",
+      "_f2c-cwjs9x3kxe.js",
+      "_f2c-1tf798b1n5.js",
+      "_f2c-u8zcvwb1zu.js",
+      "_f2c-nzv8pj89b1.js",
+      "_f2c-4md6xolfuy.js",
+      "_f2c-h7ulvo5tjo.js"
+    ]
+  },
+  "pages/landing/index.tsx": {
+    "file": "f2c-ozwc11cb2e.js",
+    "name": "index",
+    "src": "pages/landing/index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "main.tsx",
+      "_f2c-pdxeztv7ws.js",
+      "_f2c-vajirbo81h.js",
+      "_f2c-h7ulvo5tjo.js",
+      "_f2c-y02xsodu5u.js",
+      "_f2c-hl8mpw6w7j.js",
+      "_f2c-0vf62mdrvq.js",
+      "_f2c-wo86paz8en.js"
     ]
   },
   "public/images/auth-image.png": {
-    "file": "assets/f2c-8dlte9c3r8.png",
+    "file": "assets/f2c-7937pigeri.png",
     "src": "public/images/auth-image.png"
   }
 }

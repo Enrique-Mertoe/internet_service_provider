@@ -66,18 +66,22 @@ export default function Notification() {
 
   return (
     <Box sx={{ flexShrink: 0, ml: 0.75 }}>
+
       <IconButton
         color="secondary"
         variant="light"
         sx={(theme) => ({
           color: 'text.primary',
-          bgcolor: open ? 'grey.100' : 'transparent',
+          bgcolor: open ? 'grey.100' : 'grey.50',
+            p:3,
           ...theme.applyStyles('dark', { bgcolor: open ? 'background.default' : 'transparent' })
         })}
         aria-label="open profile"
         ref={anchorRef}
         aria-controls={open ? 'profile-grow' : undefined}
         aria-haspopup="true"
+
+        className={"!rounded-full"}
         onClick={handleToggle}
       >
         <Badge badgeContent={read} color="primary">

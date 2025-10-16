@@ -29,8 +29,10 @@ export default function DashboardLayout({children}) {
     if (menuMasterLoading) return <Loader/>;
 
     return (
-        <Box sx={{display: 'flex', width: '100%'}}>
-            <Header/>
+        <Box sx={{display: 'flex', width: '100%'}}
+        className={"bg-dgradient-to-b bg-[#f5f6fa] from-[#dbdbdb]to-[#c5ccda]"}
+        >
+            <Header window={() => window}/>
             <Drawer/>
 
             <Box component="main" sx={{ flexGrow: 1}}>

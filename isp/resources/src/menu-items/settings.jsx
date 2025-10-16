@@ -9,28 +9,9 @@ const settings = {
         {
             id: 'settings',
             title: 'Settings',
-            type: 'collapse',
+            type: 'item',
             icon: SettingOutlined,
-            children: [
-                {
-                    id: 'settings-company',
-                    title: 'Company Settings',
-                    type: 'item',
-                    url: '/dashboard/settings/company'
-                },
-                {
-                    id: 'settings-network',
-                    title: 'Network Config',
-                    type: 'item',
-                    url: '/dashboard/settings/network'
-                },
-                {
-                    id: 'settings-integrations',
-                    title: 'Integrations',
-                    type: 'item',
-                    url: '/dashboard/settings/integrations'
-                }
-            ]
+            url: "/dashboard/settings/general/"
         }
     ]
 };

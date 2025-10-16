@@ -16,12 +16,13 @@ import IconButton from '@/components/@extended/IconButton';
 
 import {handlerDrawerOpen, useGetMenuMaster} from '@/api/menu';
 import {useRoute} from "@/hooks/useRoute.js";
+import {Button} from "@mui/material";
 
 // ==============================|| NAVIGATION - LIST ITEM ||============================== //
 
 export default function NavItem({item, level, isParents = false, setSelectedID}) {
     const {menuMaster} = useGetMenuMaster();
-    const drawerOpen = menuMaster.isDashboardDrawerOpened;
+    const drawerOpen = !menuMaster.isDashboardDrawerOpened;
     const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
     let itemTarget = '_self';
@@ -30,7 +31,7 @@ export default function NavItem({item, level, isParents = false, setSelectedID})
     }
 
     const itemHandler = () => {
-        if (downLG) handlerDrawerOpen(false);
+        // if (downLG) handlerDrawerOpen(false);
 
         if (isParents && setSelectedID) {
             setSelectedID(item.id);
@@ -42,7 +43,7 @@ export default function NavItem({item, level, isParents = false, setSelectedID})
         <Icon
             style={{
                 fontSize: drawerOpen ? '1rem' : '1.25rem',
-                ...(isParents && {fontSize: 20, stroke: '1.5'})
+                // ...(isParents && {fontSize: 20, stroke: '1.5'})
             }}
         />
     ) : false;
@@ -55,124 +56,130 @@ export default function NavItem({item, level, isParents = false, setSelectedID})
     const textColor = 'text.primary';
     const iconSelectedColor = 'success.main'; // Changed from 'primary.main' to green
 
+    // return (
+    //     <>
+    //         <Box sx={{position: 'relative'}}>
+    //             <ListItemButton
+    //                 to={item.url}
+    //                 target={itemTarget}
+    //                 disabled={item.disabled}
+    //                 selected={isSelected}
+    //                 className={"aspect-square !bg-[#e1e3e5] hover:!bg-[#f1f3f4]"}
+    //                 sx={(theme) => ({
+    //                     zIndex: 1201,
+    //                     // width: "3rem",
+    //                     display: 'flex',
+    //                     flexDirection: "column",
+    //                     alignItems: "center",
+    //                     justifyContent: "center",
+    //                     gap: 0,
+    //                     borderRadius: 1.5,
+    //                     p: "3px",
+    //                 })}
+    //                 onClick={() => itemHandler()}
+    //             >
+    //                 {itemIcon && (
+    //                     <ListItemIcon
+    //                         sx={(theme) => ({
+    //                             color: isSelected ? iconSelectedColor : textColor,
+    //                             width: "100%",
+    //                             height: "100%",
+    //                             borderRadius: "inherit",
+    //                             backgroundColor: "transparent",
+    //                             alignItems: 'center',
+    //                             justifyContent: 'center',
+    //                             margin: 0,
+    //                             p:0
+    //                         })}
+    //                     >
+    //                         {itemIcon}
+    //                     </ListItemIcon>
+    //                 )}
+    //                 {/*{(drawerOpen || (!drawerOpen && level !== 1)) && (*/}
+    //                 <ListItemText
+    //                     sx={{
+    //                         margin: 0,
+    //                     }}
+    //                     primary={
+    //                         <Typography variant="h6" sx={{color: isSelected ? iconSelectedColor : textColor}}>
+    //                             {item.title}
+    //                         </Typography>
+    //                     }
+    //                 />
+    //                 {/*)}*/}
+    //                 {(drawerOpen || (!drawerOpen && level !== 1)) && item.chip && (
+    //                     <Chip
+    //                         color={item.chip.color}
+    //                         variant={item.chip.variant}
+    //                         size={item.chip.size}
+    //                         label={item.chip.label}
+    //                         avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
+    //                     />
+    //                 )}
+    //             </ListItemButton>
+    //             {(drawerOpen || (!drawerOpen && level !== 1)) &&
+    //                 item?.actions &&
+    //                 item?.actions.map((action, index) => {
+    //                     const ActionIcon = action.icon;
+    //                     const callAction = action?.function;
+    //                     return (
+    //                         <IconButton
+    //                             key={index}
+    //                             {...(action.type === 'function' && {
+    //                                 onClick: (event) => {
+    //                                     event.stopPropagation();
+    //                                     callAction();
+    //                                 }
+    //                             })}
+    //                             {...(action.type === 'link' && {
+    //                                 component: Link,
+    //                                 to: action.url,
+    //                                 target: action.target ? '_blank' : '_self'
+    //                             })}
+    //                             color="secondary"
+    //                             variant="outlined"
+    //                             sx={{
+    //                                 position: 'absolute',
+    //                                 top: 12,
+    //                                 right: 20,
+    //                                 zIndex: 1202,
+    //                                 width: 20,
+    //                                 height: 20,
+    //                                 mr: -1,
+    //                                 ml: 1,
+    //                                 color: 'secondary.dark',
+    //                                 borderColor: isSelected ? 'success.light' : 'secondary.light', // Changed to green
+    //                                 '&:hover': {borderColor: isSelected ? 'success.main' : 'secondary.main'} // Changed to green
+    //                             }}
+    //                         >
+    //                             <ActionIcon style={{fontSize: '0.625rem'}}/>
+    //                         </IconButton>
+    //                     );
+    //                 })}
+    //         </Box>
+    //     </>
+    // );
+
     return (
         <>
-            <Box sx={{position: 'relative'}}>
-                <ListItemButton
-                    to={item.url}
-                    target={itemTarget}
-                    disabled={item.disabled}
-                    selected={isSelected}
-                    sx={(theme) => ({
-                        zIndex: 1201,
-                        pl: drawerOpen ? `${level * 28}px` : 1.5,
-                        py: !drawerOpen && level === 1 ? 1.25 : 1,
-                        ...(drawerOpen && {
-                            '&:hover': {bgcolor: 'success.lighter', ...theme.applyStyles('dark', {bgcolor: 'divider'})}, // Changed to green
-                            '&.Mui-selected': {
-                                bgcolor: 'success.lighter', // Changed to green
-                                ...theme.applyStyles('dark', {bgcolor: 'divider'}),
-                                borderRight: '2px solid',
-                                borderColor: 'success.main', // Changed to green
-                                color: iconSelectedColor,
-                                '&:hover': {
-                                    color: iconSelectedColor,
-                                    bgcolor: 'success.lighter', ...theme.applyStyles('dark', {bgcolor: 'divider'}) // Changed to green
-                                }
-                            }
-                        }),
-                        ...(!drawerOpen && {
-                            '&:hover': {bgcolor: 'transparent'},
-                            '&.Mui-selected': {'&:hover': {bgcolor: 'transparent'}, bgcolor: 'transparent'}
-                        })
-                    })}
-                    onClick={() => itemHandler()}
-                >
-                    {itemIcon && (
-                        <ListItemIcon
-                            sx={(theme) => ({
-                                minWidth: 28,
-                                color: isSelected ? iconSelectedColor : textColor,
-                                ...(!drawerOpen && {
-                                    borderRadius: 1.5,
-                                    width: 36,
-                                    height: 36,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    '&:hover': {bgcolor: 'secondary.lighter', ...theme.applyStyles('dark', {bgcolor: 'secondary.light'})}
-                                }),
-                                ...(!drawerOpen &&
-                                    isSelected && {
-                                        bgcolor: 'success.lighter', // Changed to green
-                                        ...theme.applyStyles('dark', {bgcolor: 'success.900'}), // Changed to green
-                                        '&:hover': {bgcolor: 'success.lighter', ...theme.applyStyles('dark', {bgcolor: 'success.darker'})} // Changed to green
-                                    })
-                            })}
-                        >
-                            {itemIcon}
-                        </ListItemIcon>
-                    )}
-                    {(drawerOpen || (!drawerOpen && level !== 1)) && (
-                        <ListItemText
-                            primary={
-                                <Typography variant="h6" sx={{color: isSelected ? iconSelectedColor : textColor}}>
-                                    {item.title}
-                                </Typography>
-                            }
-                        />
-                    )}
-                    {(drawerOpen || (!drawerOpen && level !== 1)) && item.chip && (
-                        <Chip
-                            color={item.chip.color}
-                            variant={item.chip.variant}
-                            size={item.chip.size}
-                            label={item.chip.label}
-                            avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
-                        />
-                    )}
-                </ListItemButton>
-                {(drawerOpen || (!drawerOpen && level !== 1)) &&
-                    item?.actions &&
-                    item?.actions.map((action, index) => {
-                        const ActionIcon = action.icon;
-                        const callAction = action?.function;
-                        return (
-                            <IconButton
-                                key={index}
-                                {...(action.type === 'function' && {
-                                    onClick: (event) => {
-                                        event.stopPropagation();
-                                        callAction();
-                                    }
-                                })}
-                                {...(action.type === 'link' && {
-                                    component: Link,
-                                    to: action.url,
-                                    target: action.target ? '_blank' : '_self'
-                                })}
-                                color="secondary"
-                                variant="outlined"
-                                sx={{
-                                    position: 'absolute',
-                                    top: 12,
-                                    right: 20,
-                                    zIndex: 1202,
-                                    width: 20,
-                                    height: 20,
-                                    mr: -1,
-                                    ml: 1,
-                                    color: 'secondary.dark',
-                                    borderColor: isSelected ? 'success.light' : 'secondary.light', // Changed to green
-                                    '&:hover': {borderColor: isSelected ? 'success.main' : 'secondary.main'} // Changed to green
-                                }}
-                            >
-                                <ActionIcon style={{fontSize: '0.625rem'}}/>
-                            </IconButton>
-                        );
-                    })}
-            </Box>
+            <ListItemButton
+                to={item.url}
+                target={itemTarget}
+                disabled={item.disabled}
+                selected={isSelected}
+                sx={{
+                    borderRadius: 1.5
+                }}
+                className={`flex w-[5rem] text-gray-900 hover:!text-green-800 cursor-pointer py-3 px-2 justify-center gap-2 items-center !bg-[#e1e3e5]hover:!bg-[#f1f3f4] flex-col
+                ${
+                    isSelected && "!bg-[#e1e3e5] !text-green-800"
+                }
+                `}>
+                {itemIcon}
+                <span className={"capitalize text-xs"}>{item.title}</span>
+            </ListItemButton>
         </>
-    );
+    )
 }
 
 NavItem.propTypes = {

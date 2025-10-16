@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from inertia import inertia
 from django.urls import reverse
 
+
 # =============================================================================
 # MAIN DASHBOARD
 # =============================================================================
@@ -39,6 +40,13 @@ def dashboard_analytics(request):
 @login_required
 @inertia("dashboard/clients/index")
 def customers_list(request):
+    """List all customers with search and filtering"""
+    return {}
+
+
+@login_required
+@inertia("dashboard/equipments/index")
+def equipments(request):
     """List all customers with search and filtering"""
     return {}
 
@@ -203,7 +211,7 @@ def subscription_upgrade(request, subscription_id):
 # =============================================================================
 
 @login_required
-@inertia("network/overview")
+@inertia("dashboard/network/index")
 def network_overview(request):
     """Network infrastructure overview"""
     return {}
@@ -542,10 +550,10 @@ def reports_scheduled(request):
 # =============================================================================
 
 @login_required
-@inertia("settings/general")
+@inertia("dashboard/settings/index")
 def settings_general(request):
     """General ISP settings"""
-    return {}
+    return {"page": "general"}
 
 
 @login_required

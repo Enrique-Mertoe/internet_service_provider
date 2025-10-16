@@ -7,21 +7,21 @@ const analytics = {
   children: [
     {
       id: 'usage-live',
-      title: 'Live Usage',
+      title: 'Usage',
       type: 'item',
       url: '/dashboard/usage/real-time',
       icon: BarChartOutlined
     },
     {
       id: 'usage-bandwidth',
-      title: 'Bandwidth Monitor',
+      title: 'Bandwidth',
       type: 'item',
       url: '/dashboard/usage/bandwidth',
       icon: LineChartOutlined
     },
     {
       id: 'usage-reports',
-      title: 'Usage Reports',
+      title: 'Reports',
       type: 'item',
       url: '/dashboard/usage/reports',
       icon: PieChartOutlined
