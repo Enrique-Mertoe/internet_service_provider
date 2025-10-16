@@ -227,6 +227,11 @@ ISP_NAME = "F2Net ISP"
 SUPPORT_PHONE = "+254714356761"
 SUPPORT_EMAIL = "support@lomtechnology.com"
 
+# Create logs directory if it doesn't exist
+import os
+LOGS_DIR = BASE_DIR / 'logs'
+os.makedirs(LOGS_DIR, exist_ok=True)
+
 # Logging configuration
 LOGGING = {
     'version': 1,
@@ -248,7 +253,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'django.log',
+            'filename': str(LOGS_DIR / 'django.log'),
             'maxBytes': 10485760,  # 10MB
             'backupCount': 5,
             'formatter': 'verbose',
